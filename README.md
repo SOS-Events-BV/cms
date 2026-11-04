@@ -1,0 +1,326 @@
+# CMS for websites of SOS Events BV.
+
+This package provides a CMS panel plugin for Filament for websites of SOS Events BV. This package contains a page
+builder, product resource, user management and more.
+
+## Installation
+
+After adding the package to your project, you can install the plugin by running:
+
+```bash
+php artisan cms:install
+```
+
+This will ask if you want to run the migrations. If you haven't run the migrations yet, make sure you select yes. If you
+have already run the migrations, please delete all tables and run the migrations again.
+
+Because we make changes to the User model, we need to add the `HasCmsFields` trait to the User model. This can be
+done by adding the following line to the `App\Models\User` model:
+
+```php
+use SOSEventsBV\Cms\Traits\HasCmsFields;
+
+class User extends Authenticatable implements FilamentUser
+{
+    use HasCmsFields;
+
+    // ... The rest of the User model
+}
+```
+
+### Registering the plugin
+
+Add the plugin to your Filament panel provider in `app/Providers/Filament/AdminPanelProvider.php`:
+
+```php
+use SOSEventsBV\Cms\CmsPlugin;
+
+public function panel(Panel $panel): Panel
+{
+    return $panel
+        // ...
+        ->plugins([
+            CmsPlugin::make(),
+        ]);
+}
+```
+
+### Redirecting
+
+The CMS has a redirect feature built in. If you want to have redirects, you must add the following to your
+withMiddleware function in the `bootstrap/app.php` file:
+
+```php
+use SOSEventsBV\Cms\Middleware\HandleRedirects;
+
+return Application::configure(basePath: dirname(__DIR__))
+    // ...
+    ->withMiddleware(function (Middleware $middleware): void {
+        $middleware->append(HandleRedirects::class);
+    })
+    // ...
+```
+
+### Environment variables
+
+We also have a few environment variables that are required for the plugin to work. You need to fill this in with your
+own values and keys. Please add these to your `.env` file and `.env.example` file (but without the values 😉).
+
+```dotenv
+# LeisureKing API
+CMS_LEISUREKING_API_URL="https://api.leisureking.eu/public"
+CMS_LEISUREKING_API_VERSION="v4"
+CMS_LEISUREKING_API_USERNAME=""
+CMS_LEISUREKING_API_PASSWORD=""
+CMS_LEISUREKING_API_ENVIRONMENT="test" # test or production
+CMS_LEISUREKING_API_SHOPHID=""
+
+# Reviews API
+CMS_REVIEW_API_URL="https://reageren.sosevents.nl/api"
+CMS_REVIEW_API_KEY=""
+CMS_REVIEW_API_SHOP_ID=""
+
+# Recaptcha / No captcha keys
+NOCAPTCHA_SECRET=
+NOCAPTCHA_SITEKEY=
+```
+
+### Styling (optional)
+
+The page view uses a `text-format` class for content formatting. Add the following to your CSS file:
+
+```css
+.text-format {
+    @apply prose prose-headings:mb-4 prose-headings:not-first:mt-5
+    prose-h3:font-normal prose-h4:font-normal prose-h5:font-normal prose-h6:font-normal
+    [&>*:first-child]:mt-0 [&>*:first-child]:pt-0
+    [&>*:last-child]:mb-0 [&>*:last-child]:pb-0
+    max-w-none text-black;
+}
+```
+
+Make sure you have the `@tailwindcss/typography` plugin installed.
+
+
+Also, make sure that you add the following to your `app.css` file:
+
+```css
+@source '../../vendor/sos-events-bv/cms/**/*.{blade.php,php}';
+```
+
+This will make sure that the CSS of the page builder blocks is included in the build.
+
+## Requirements
+
+This plugin requires a `layout` Blade component in your project with the following props:
+
+```php
+@props([
+    'title' => config('app.name'),
+    'description' => '',
+    'keywords' => null,
+    'og_title' => null,
+    'og_description' => null,
+    'og_image' => null,
+])
+```
+
+If you are using the [CMS Template](https://github.com/sos-events-bv/website-template), this is already included.
+
+You can change the layout component in the config:
+
+```php
+'layout' => 'layout', // x-layout
+```
+
+## Usage
+
+### Optional features
+
+By default, the plugin registers all resources. You can disable individual features when registering the plugin:
+
+```php
+CmsPlugin::make()
+    ->withoutReviews()
+    ->withoutFaq()
+    ->withoutEvents()
+    ->withoutProducts(), // also disables Categories
+```
+
+### Additional page fields
+
+You can add your own fields to the page form with `additionalPageInputs()`. They are shown in an "Extra velden" section
+below the page builder (the section is hidden when no fields are given):
+
+```php
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+
+CmsPlugin::make()
+    ->additionalPageInputs([
+        TextInput::make('subtitle'),
+        Toggle::make('show_in_footer'),
+    ]),
+```
+
+The package does not create database columns for these fields, so add them to the `pages` table yourself with a
+migration in your app:
+
+```php
+Schema::table('pages', function (Blueprint $table) {
+    $table->string('subtitle')->nullable();
+    $table->boolean('show_in_footer')->default(false);
+});
+```
+
+The `Page` model only guards `id` and the timestamps, so the new columns are mass assignable without further changes.
+
+### Page builder
+
+Pages are built in the admin panel using a block-based editor. Each page's content is stored as a JSON array of typed
+blocks. On the front end, the page view loops over `$page->content_objects` and renders each block as a Blade component:
+
+```blade
+@foreach ($page->content_objects as $block)
+    {{-- Temp fix for block names, will be fixed in new version --}}
+    @php($blockView = str_replace('_', '-', $block->type))
+    
+    {{-- Package Components --}}
+    @if(view()->exists("cms::components.blocks.{$blockView}"))
+        <x-dynamic-component :component="'cms::blocks.' . $block->type" :data="$block->data"/>
+    {{-- Own components --}}
+    @elseif(view()->exists("components.cms.custom-blocks.{$blockView}"))
+        <x-dynamic-component :component="'cms.custom-blocks.' . $block->type" :data="$block->data"/>
+    @endif
+@endforeach
+```
+
+The entire loop is wrapped in a `<div class="text-format">`, so your `text-format` CSS class applies to all block
+output.
+
+> **Do not use these components in your own views.** These blocks are specially made for the pagebuilder and
+> will not work in 'normal' blade views. Exception is the form fields: these are recommended to use in views, because
+> they have error handling built in.
+
+### Using the page builder on your own models
+
+If you want to use the page builder on a model other than `Page` (e.g. `Product`), add the `HasContentBlocks` trait:
+
+```php
+use SOSEventsBV\Cms\Traits\HasContentBlocks;
+
+class Product extends Model
+{
+    use HasContentBlocks;
+
+    protected $casts = ['content' => 'array'];
+}
+```
+
+Then use `ContentBuilder::make('content')->blocks(ContentBuilder::blocks('product'))` in your Filament form schema and
+render with `$product->content_objects` in your Blade view.
+
+If the content field is named differently, override `contentBlocksField()` in your model:
+
+```php
+protected function contentBlocksField(): string
+{
+    return 'description';
+}
+```
+
+### Form builder
+
+Pages with a `FormBuilderBlock` get a form at `/{slug}/submit`. On successful submission the visitor is redirected to
+`/{slug}/success`. The block stores the recipient email address and the success title/message — no additional
+configuration is needed.
+
+### Adding your own catch-all routes
+
+The package registers its own catch-all routes (`/{slug}`, `/{slug}/submit`, `/{slug}/success`) as the very last
+routes in the application, so any specific route you define in your own app already takes priority over them.
+
+If you also want your own catch-all route (e.g. to resolve slugs against your own models before falling back to
+CMS pages), disable the package's catch-all routes in `config/cms.php`:
+
+```php
+'routing' => [
+    // ...
+    'register_catch_all' => false,
+],
+```
+
+Then define your own catch-all route and call `PageController` yourself as the final fallback:
+
+```php
+use SOSEventsBV\Cms\Http\Controllers\PageController;
+
+Route::get('/{slug}', function (string $slug) {
+    if ($event = Event::where('slug', $slug)->first()) {
+        return view('events.show', ['event' => $event]);
+    }
+
+    // Nothing of our own matched, let the CMS try to find a page
+    return app(PageController::class)->show($slug);
+})->where('slug', '.+');
+```
+
+`PageController::show()`, `submitForm()` and `showSuccess()` are plain, stateless methods, so you can call them
+directly like this regardless of `register_catch_all`.
+
+### Routes config
+
+The `routes` array in `config/cms.php` maps resource types to named routes in your application. These are used to
+show a "View on site" button in the admin panel. Set a value to `null` to hide the button for that resource.
+
+```php
+'routes' => [
+    'page'     => 'page',      // route('page', $slug)
+    'category' => 'category',  // route('category', $slug)
+    'product'  => 'product',   // route('product', $slug)
+    'reviews'  => 'reviews',
+    'faq'      => 'faq',
+    'events'   => 'events',
+    'products' => 'products',
+],
+```
+
+### Overriding views
+
+Publish the config and point `views.page` to your own Blade view to customize the page layout:
+
+```php
+'views' => [
+    'page' => 'my-theme::page.show',
+],
+```
+
+### Roles
+
+Roles are defined in the `roles` array of `config/cms.php`. The array key is stored in the `role` column of the
+user, the `label` is shown in the admin panel.
+
+```php
+'roles' => [
+    'admin' => [
+        'label' => 'Administrator',
+        'super_admin' => true, // Grants all permissions
+    ],
+    'editor' => [
+        'label' => 'Editor',
+        'permissions' => [
+            PageResource::class   => ['view', 'create', 'update'],
+            ReviewResource::class => ['view', 'update'],
+            ManageCompany::class  => ['manage'],
+        ],
+    ],
+],
+```
+
+Resources support the `view`, `create`, `update` and `delete` permissions. Filament pages (such as `ManageCompany`)
+only support `manage`. Resources or pages that are not listed are not accessible for that role.
+
+You can check a permission yourself with `$user->hasPermission(PageResource::class, 'update')`.
+
+> Roles used to be defined via the `UserRole` enum. This is deprecated since version 1.2 and will
+> be removed in version 2, where roles will be managed in the admin panel.
