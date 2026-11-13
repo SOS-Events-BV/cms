@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use SOSEventsBV\Cms\Mail\PageFormMail;
+use SOSEventsBV\Cms\Mail\FormMail;
 use SOSEventsBV\Cms\Models\Page;
 
 class PageController
@@ -79,7 +79,7 @@ class PageController
 
         // Send email to the given email with form data
         $email = $pageForm->data->email;
-        Mail::to($email)->send(new PageFormMail($slug, $formData));
+        Mail::to($email)->send(new FormMail($slug, $formData));
 
         return redirect()->route('page.success', $slug);
     }

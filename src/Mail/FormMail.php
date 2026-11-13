@@ -2,14 +2,15 @@
 
 namespace SOSEventsBV\Cms\Mail;
 
+use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class PageFormMail extends Mailable
+class FormMail extends Mailable
 {
-    use SerializesModels;
+    use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
@@ -28,7 +29,7 @@ class PageFormMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Nieuw formulier ingevuld op /$this->slug | " . config('cms.app_name'),
+            subject: "Nieuw formulier ingevuld op /{$this->slug} | " . config('app.name'),
         );
     }
 
@@ -38,17 +39,7 @@ class PageFormMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'cms::mail.page-form',
+            markdown: 'cms::email.form',
         );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
-    {
-        return [];
     }
 }
