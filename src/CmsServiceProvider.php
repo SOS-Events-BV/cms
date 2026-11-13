@@ -12,6 +12,8 @@ use SocialiteProviders\Microsoft\MicrosoftExtendSocialite;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use DutchCodingCompany\FilamentSocialite\Events\Login;
+use Laravel\Socialite\Socialite;
 
 class CmsServiceProvider extends PackageServiceProvider
 {
@@ -63,6 +65,16 @@ class CmsServiceProvider extends PackageServiceProvider
     {
         // Register the Microsoft driver for Socialite (used for Microsoft login in Filament)
         Event::listen(SocialiteWasCalled::class, [MicrosoftExtendSocialite::class, 'handle']);
+
+        // Sync the app roles and profile photo from Microsoft Entra ID on every successful login.
+        Event::listen(Login::class, function (Login $event) {
+            $avatar = $event->oauthUser->avatar ?? null;
+
+            $event->socialiteUser->getUser()->update([
+                'roles' => $event->oauthUser->roles ?? [],
+                'avatar' => $avatar ? 'data:image/jpeg;base64,' . $avatar : null,
+            ]);
+        });
 
         // Load translation overrides for other packages from lang/vendor/{namespace}
         $this->callAfterResolving('translation.loader', function ($loader) {

@@ -12,11 +12,9 @@ use SOSEventsBV\Cms\Resources\Products\Pages\EditProduct;
 use SOSEventsBV\Cms\Resources\Products\Pages\ListProducts;
 use SOSEventsBV\Cms\Resources\Products\Schemas\ProductForm;
 use SOSEventsBV\Cms\Resources\Products\Tables\ProductsTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class ProductResource extends Resource
 {
-    use HasCmsPermissions;
 
     protected static ?string $model = Product::class;
     protected static string|null|\BackedEnum $navigationIcon = Heroicon::OutlinedShoppingBag;

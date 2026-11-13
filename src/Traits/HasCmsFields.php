@@ -2,41 +2,43 @@
 
 namespace SOSEventsBV\Cms\Traits;
 
-use Filament\Panel;
-
-/**
- * @property bool $is_active
- */
 trait HasCmsFields
 {
-    /**
-     * Initialize the trait and add is_active to fillable, so it can be changed in the Filament panel.
-     *
-     * @return void
-     */
-    protected function initializeHasCmsFields(): void
+    public function initializeHasCmsFields(): void
     {
-        $this->mergeFillable(['is_active']);
+        $this->mergeCasts(['roles' => 'array']);
+        $this->mergeFillable(['roles', 'avatar']);
+
+        // The avatar is a base64 data URI, keep it out of arrays/JSON
+        $this->hidden[] = 'avatar';
     }
 
     /**
-     * Checks if the user is active.
-     *
-     * @return bool
+     * Get all roles of the User
+     * 
+     * @return array<string>
      */
-    public function isActive(): bool
+    public function getRoles(): array
     {
-        return $this->is_active;
+        return $this->roles ?? [];
     }
 
     /**
-     * Checks if the user can access the CMS panel.
+     * Check if the user has the given role, or one of the given roles.
      *
-     * @param Panel $panel
-     * @return bool
+     * @param  string|array<string>  $roles
      */
-    public function canAccessPanel(Panel $panel): bool
+    public function hasRole(string|array $roles): bool
     {
-        return $this->isActive();
+        return array_intersect((array) $roles, $this->getRoles()) !== [];
+    }
+
+    /**
+     * Used by Filament when the User model implements Filament\Models\Contracts\HasAvatar.
+     * Returns null when there is no avatar, so Filament falls back to the initials.
+     */
+    public function getFilamentAvatarUrl(): ?string
+    {
+        return $this->avatar;
     }
 }

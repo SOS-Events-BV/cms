@@ -18,12 +18,9 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use SOSEventsBV\Cms\Models\FaqPageQuestion;
 use SOSEventsBV\Cms\Resources\FaqPageQuestions\Pages\ManageFaqPageQuestions;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class FaqPageQuestionResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = FaqPageQuestion::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedQuestionMarkCircle;

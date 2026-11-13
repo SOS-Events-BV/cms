@@ -14,12 +14,9 @@ use SOSEventsBV\Cms\Resources\Pages\Pages\EditPage;
 use SOSEventsBV\Cms\Resources\Pages\Pages\ListPages;
 use SOSEventsBV\Cms\Resources\Pages\Schemas\PageForm;
 use SOSEventsBV\Cms\Resources\Pages\Tables\PagesTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class PageResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = Page::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;

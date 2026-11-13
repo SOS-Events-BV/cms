@@ -87,6 +87,8 @@ return [
             'client_id' => env('CMS_MICROSOFT_CLIENT_ID'),
             'client_secret' => env('CMS_MICROSOFT_CLIENT_SECRET'),
             'tenant' => env('CMS_MICROSOFT_TENANT_ID'),
+            'include_avatar' => true,
+            'include_avatar_size' => '120x120',
         ],
     ],
 

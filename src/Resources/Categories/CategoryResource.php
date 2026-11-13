@@ -13,12 +13,9 @@ use SOSEventsBV\Cms\Resources\Categories\Pages\EditCategory;
 use SOSEventsBV\Cms\Resources\Categories\Pages\ListCategories;
 use SOSEventsBV\Cms\Resources\Categories\Schemas\CategoryForm;
 use SOSEventsBV\Cms\Resources\Categories\Tables\CategoriesTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class CategoryResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = Category::class;
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedTag;
     protected static ?string $recordTitleAttribute = 'name';

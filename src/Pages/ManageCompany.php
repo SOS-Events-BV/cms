@@ -8,12 +8,9 @@ use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use SOSEventsBV\Cms\Settings\CompanySettings;
-use SOSEventsBV\Cms\Traits\HasCmsPagePermissions;
 
 class ManageCompany extends SettingsPage
 {
-    use HasCmsPagePermissions;
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
     protected static string $settings = CompanySettings::class;

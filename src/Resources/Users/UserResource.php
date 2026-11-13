@@ -12,12 +12,9 @@ use SOSEventsBV\Cms\Resources\Users\Pages\EditUser;
 use SOSEventsBV\Cms\Resources\Users\Pages\ListUsers;
 use SOSEventsBV\Cms\Resources\Users\Schemas\UserForm;
 use SOSEventsBV\Cms\Resources\Users\Tables\UsersTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class UserResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = null;
 
     public static function getModel(): string
