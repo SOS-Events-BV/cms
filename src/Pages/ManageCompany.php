@@ -7,6 +7,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Pages\SettingsPage;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Facades\Auth;
+use Override;
 use SOSEventsBV\Cms\Settings\CompanySettings;
 
 class ManageCompany extends SettingsPage
@@ -60,5 +62,11 @@ class ManageCompany extends SettingsPage
                     ->numeric()
                     ->required(),
             ]);
+    }
+
+    #[Override]
+    public static function canAccess(): bool
+    {
+        return Auth::user()->hasRole('admin');
     }
 }

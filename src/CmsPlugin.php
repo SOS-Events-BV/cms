@@ -20,7 +20,6 @@ use SOSEventsBV\Cms\Resources\Pages\PageResource;
 use SOSEventsBV\Cms\Resources\Products\ProductResource;
 use SOSEventsBV\Cms\Resources\Redirects\RedirectResource;
 use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
-use SOSEventsBV\Cms\Resources\Users\UserResource;
 
 class CmsPlugin implements Plugin
 {
@@ -75,7 +74,6 @@ class CmsPlugin implements Plugin
     {
         $resources = [
             PageResource::class,
-            UserResource::class,
             RedirectResource::class,
         ];
 

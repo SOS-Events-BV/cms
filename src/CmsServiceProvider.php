@@ -13,7 +13,6 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use DutchCodingCompany\FilamentSocialite\Events\Login;
-use Laravel\Socialite\Socialite;
 
 class CmsServiceProvider extends PackageServiceProvider
 {
