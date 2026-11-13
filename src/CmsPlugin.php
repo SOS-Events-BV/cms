@@ -4,6 +4,8 @@ namespace SOSEventsBV\Cms;
 
 use Cocosmos\FilamentStickySaveBar\Enums\ShowOn;
 use Cocosmos\FilamentStickySaveBar\StickySaveBarPlugin;
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
@@ -114,6 +116,15 @@ class CmsPlugin implements Plugin
             ->plugins([
                 StickySaveBarPlugin::make()
                     ->showOn(ShowOn::Dirty),
+
+                FilamentSocialitePlugin::make()
+                    ->providers([
+                        Provider::make('microsoft')
+                            ->label('Microsoft')
+                            // ->icon('bi-microsoft')
+                            ->color('#2f2f2f'),
+                    ])
+                    ->registration(true),
             ]);
     }
 

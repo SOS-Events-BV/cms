@@ -103,7 +103,13 @@ return [
             'url' => env('CMS_REVIEW_API_URL', 'https://reageren.sosevents.nl/api'),
             'api_key' => env('CMS_REVIEW_API_KEY'),
             'shop_id' => env('CMS_REVIEW_API_SHOP_ID'),
-        ]
+        ],
+
+        'microsoft' => [
+            'client_id' => env('CMS_MICROSOFT_CLIENT_ID'),
+            'client_secret' => env('CMS_MICROSOFT_CLIENT_SECRET'),
+            'tenant' => env('CMS_MICROSOFT_TENANT_ID'),
+        ],
     ],
 
     /**
