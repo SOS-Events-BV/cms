@@ -8,7 +8,7 @@ van de website <a href="{{ config('app.url') }}">{{ config('app.name') }}</a>. H
 | Veld | Waarde |
 | ---- | ------ |
 @foreach($formData as $field => $value)
-| {{ Str::ucfirst(str_replace('_', ' ', $field)) }} | {{ $value ?? '-' }} |
+| {{ Str::ucfirst(str_replace('_', ' ', $field)) }} | {!! blank($value) ? '-' : str_replace(["\r\n", "\r", "\n", '|'], ['<br>', '<br>', '<br>', '&#124;'], e($value)) !!} |
 @endforeach
 </x-mail::table>
 
