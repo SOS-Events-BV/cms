@@ -1,7 +1,7 @@
 # CMS for websites of SOS Events BV.
 
 This package provides a CMS panel plugin for Filament for websites of SOS Events BV. This package contains a page
-builder, product resource, user management and more.
+builder, product resource, company management and more.
 
 ## Installation
 
@@ -70,15 +70,20 @@ own values and keys. Please add these to your `.env` file and `.env.example` fil
 # LeisureKing API
 CMS_LEISUREKING_API_URL="https://api.leisureking.eu/public"
 CMS_LEISUREKING_API_VERSION="v4"
-CMS_LEISUREKING_API_USERNAME=""
-CMS_LEISUREKING_API_PASSWORD=""
-CMS_LEISUREKING_API_ENVIRONMENT="test" # test or production
-CMS_LEISUREKING_API_SHOPHID=""
+CMS_LEISUREKING_API_USERNAME=
+CMS_LEISUREKING_API_PASSWORD=
+CMS_LEISUREKING_API_ENVIRONMENT="production" # test or production, production is preferred
+CMS_LEISUREKING_API_SHOPHID=
 
 # Reviews API
 CMS_REVIEW_API_URL="https://reageren.sosevents.nl/api"
-CMS_REVIEW_API_KEY=""
-CMS_REVIEW_API_SHOP_ID=""
+CMS_REVIEW_API_KEY=
+CMS_REVIEW_API_SHOP_ID=
+
+# Microsoft oAuth
+CMS_MICROSOFT_CLIENT_ID=
+CMS_MICROSOFT_CLIENT_SECRET=
+CMS_MICROSOFT_TENANT_ID=
 
 # Recaptcha / No captcha keys
 NOCAPTCHA_SECRET=
