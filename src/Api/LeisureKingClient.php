@@ -1,16 +1,17 @@
 <?php
 
-namespace SOSEventsBV\Cms\Services;
+namespace SOSEventsBV\Cms\Api;
 
+use Illuminate\Support\Facades\Http;
+use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use Exception;
 use InvalidArgumentException;
 
-class LeisureKingService
+class LeisureKingClient extends ApiClient
 {
     protected string $baseUrl;
     protected string $version;
@@ -24,18 +25,17 @@ class LeisureKingService
         $this->shophid = config('cms.services.leisureking.shophid');
         $this->environment = config('cms.services.leisureking.environment');
     }
+
     /**
      * Client for LeisureKing API.
      *
      * @return PendingRequest
      */
-    protected function client(): PendingRequest
+    public function client(): PendingRequest
     {
         return Http::baseUrl($this->baseUrl)
-            ->withHeaders([
-                'Authorization' => 'Token ' . $this->getToken(),
-                'Accept' => 'application/json',
-            ]);
+            ->acceptJson()
+            ->withToken($this->getToken(), 'Token');
     }
 
     /**
@@ -64,25 +64,26 @@ class LeisureKingService
                 ->post($url, $payload)
                 ->throw()
                 ->json('data');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error("LeisureKing API Request Error: {$e->getMessage()}", [
                 'endpoint' => $endpoint,
                 'url' => $url,
                 'payload' => $payload,
             ]);
+
             throw $e;
         }
     }
 
     /**
-     * Get the JWT-token from the LeisureKing API. This token will be cached for 10 minutes.
+     * Get the JWT-token from the LeisureKing API. This token will be cached for 10 minutes per environment.
      *
      * @return string
      */
     protected function getToken(): string
     {
         // Cache the JWT-token for 10 minutes (max LK is 15 minutes)
-        return Cache::remember('leisureking_token', 600, function () {
+        return Cache::remember("leisureking_token.{$this->environment}", 600, function () {
             try {
                 $response = Http::post("{$this->baseUrl}/authenticate/{$this->version}", [
                     'username' => config('cms.services.leisureking.username'),
@@ -93,18 +94,19 @@ class LeisureKingService
                 $response->throw(); // Throw error if auth fails
 
                 return $response->json('data.token'); // Return the JWT-token
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 Log::error("LeisureKing API Auth Error: {$e->getMessage()}", [
                     'url' => "{$this->baseUrl}/authenticate/{$this->version}",
                     'username' => config('cms.services.leisureking.username'),
                 ]);
+
                 throw $e;
             }
         });
     }
 
     /**
-     * Set the version of the LesiureKingService.
+     * Set the API version of the LeisureKing client.
      *
      * @param string $version
      * @return void
@@ -115,10 +117,11 @@ class LeisureKingService
     }
 
     /**
-     * Set the environment (test or production) of the LeisureKingService
+     * Set the environment (`test` or `production`) of the LeisureKing client.
      *
-     * @param string $environment
+     * @param string $environment `test` or `production`
      * @return void
+     * @throws InvalidArgumentException
      */
     public function setEnvironment(string $environment)
     {
@@ -132,13 +135,13 @@ class LeisureKingService
     }
 
     /**
-     * Set the shophid of the LeisureKingService
+     * Set the shophid of the LeisureKing client.
      *
-     * @param string $shopHid
+     * @param string $shophid
      * @return void
      */
-    public function setShopHid(string $shopHid)
+    public function setShopHid(string $shophid)
     {
-        $this->shophid = $shopHid;
+        $this->shophid = $shophid;
     }
 }
