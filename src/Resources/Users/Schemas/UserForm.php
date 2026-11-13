@@ -36,12 +36,6 @@ class UserForm
                     ->label('Account actief')
                     ->default(true)
                     ->helperText('Indien uitgeschakeld, kan de gebruiker niet inloggen.'),
-
-                Select::make('role')
-                    ->label('Rol')
-                    ->options(collect(config('cms.roles'))->map(fn (array $role) => $role['label']))
-                    ->required()
-                    ->native(false),
             ]);
     }
 }

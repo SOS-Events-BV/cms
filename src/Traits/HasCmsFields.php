@@ -10,13 +10,13 @@ use Filament\Panel;
 trait HasCmsFields
 {
     /**
-     * Initialize the trait and add is_active and role to fillable, so they can be changed in the Filament panel.
+     * Initialize the trait and add is_active to fillable, so it can be changed in the Filament panel.
      *
      * @return void
      */
     protected function initializeHasCmsFields(): void
     {
-        $this->mergeFillable(['is_active', 'role']);
+        $this->mergeFillable(['is_active']);
     }
 
     /**
@@ -27,65 +27,6 @@ trait HasCmsFields
     public function isActive(): bool
     {
         return $this->is_active;
-    }
-
-    /**
-     * Get the user's role.
-     *
-     * @return string
-     */
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    public function getRoleConfig(): array
-    {
-        return config('cms.roles.' . $this->role);
-    }
-
-    /**
-     * Returns if the user is a super admin.
-     * @return bool
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->getRole() == 'admin' || ($this->getRoleConfig()['super_admin'] ?? false);
-    }
-
-    /**
-     * Returns if the user is an Admin.
-     * @deprecated since 1.2, will be removed in 2.0. Please use $user->isSuperAdmin() instead.
-     * @return bool
-     */
-    public function isAdmin(): bool
-    {
-        return $this->isSuperAdmin();
-    }
-
-    /**
-     * Returns if the user is an Editor.
-     * @deprecated since 1.2, will be removed in 2.0. Please use $user->getRole() or $user->hasPermission() instead.
-     * @return bool
-     */
-    public function isEditor(): bool
-    {
-        return $this->getRole() == 'editor';
-    }
-
-    /**
-     * Returns if the user has permission to perform an action on a class.
-     * @param string $class
-     * @param string $action
-     * @return bool
-     */
-    public function hasPermission(string $class, string $action): bool
-    {
-        if (empty($this->role)) return false;
-
-        if ($this->getRoleConfig()['super_admin'] ?? false) return true;
-
-        return in_array($action, $this->getRoleConfig()['permissions'][$class] ?? []);
     }
 
     /**

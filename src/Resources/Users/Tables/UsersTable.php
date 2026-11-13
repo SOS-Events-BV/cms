@@ -27,9 +27,6 @@ class UsersTable
                     ->label('E-mailadres')
                     ->searchable(),
 
-                TextColumn::make('role')
-                    ->label('Rol'),
-
                 IconColumn::make('is_active')
                     ->label('Account actief')
                     ->boolean(),
@@ -51,11 +48,6 @@ class UsersTable
                 fn($query) => $query->where('id', '!=', Auth::user()->id)
             )
             ->filters([
-                SelectFilter::make('role')
-                    ->label('Rol')
-                    ->native(false)
-                    ->options(collect(config('cms.roles'))->map(fn (array $role) => $role['label'])),
-
                 Filter::make('is_active')
                     ->label('Toon alleen actieve gebruikers')
                     ->toggle()
