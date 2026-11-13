@@ -1,7 +1,7 @@
 # CMS for websites of SOS Events BV.
 
 This package provides a CMS panel plugin for Filament for websites of SOS Events BV. This package contains a page
-builder, product resource, user management and more.
+builder, product resource, company management and more.
 
 ## Installation
 
@@ -70,15 +70,20 @@ own values and keys. Please add these to your `.env` file and `.env.example` fil
 # LeisureKing API
 CMS_LEISUREKING_API_URL="https://api.leisureking.eu/public"
 CMS_LEISUREKING_API_VERSION="v4"
-CMS_LEISUREKING_API_USERNAME=""
-CMS_LEISUREKING_API_PASSWORD=""
-CMS_LEISUREKING_API_ENVIRONMENT="test" # test or production
-CMS_LEISUREKING_API_SHOPHID=""
+CMS_LEISUREKING_API_USERNAME=
+CMS_LEISUREKING_API_PASSWORD=
+CMS_LEISUREKING_API_ENVIRONMENT="production" # test or production, production is preferred
+CMS_LEISUREKING_API_SHOPHID=
 
 # Reviews API
 CMS_REVIEW_API_URL="https://reageren.sosevents.nl/api"
-CMS_REVIEW_API_KEY=""
-CMS_REVIEW_API_SHOP_ID=""
+CMS_REVIEW_API_KEY=
+CMS_REVIEW_API_SHOP_ID=
+
+# Microsoft oAuth
+CMS_MICROSOFT_CLIENT_ID=
+CMS_MICROSOFT_CLIENT_SECRET=
+CMS_MICROSOFT_TENANT_ID=
 
 # Recaptcha / No captcha keys
 NOCAPTCHA_SECRET=
@@ -100,7 +105,6 @@ The page view uses a `text-format` class for content formatting. Add the followi
 ```
 
 Make sure you have the `@tailwindcss/typography` plugin installed.
-
 
 Also, make sure that you add the following to your `app.css` file:
 
@@ -184,7 +188,7 @@ blocks. On the front end, the page view loops over `$page->content_objects` and 
 @foreach ($page->content_objects as $block)
     {{-- Temp fix for block names, will be fixed in new version --}}
     @php($blockView = str_replace('_', '-', $block->type))
-    
+
     {{-- Package Components --}}
     @if(view()->exists("cms::components.blocks.{$blockView}"))
         <x-dynamic-component :component="'cms::blocks.' . $block->type" :data="$block->data"/>
@@ -294,33 +298,3 @@ Publish the config and point `views.page` to your own Blade view to customize th
     'page' => 'my-theme::page.show',
 ],
 ```
-
-### Roles
-
-Roles are defined in the `roles` array of `config/cms.php`. The array key is stored in the `role` column of the
-user, the `label` is shown in the admin panel.
-
-```php
-'roles' => [
-    'admin' => [
-        'label' => 'Administrator',
-        'super_admin' => true, // Grants all permissions
-    ],
-    'editor' => [
-        'label' => 'Editor',
-        'permissions' => [
-            PageResource::class   => ['view', 'create', 'update'],
-            ReviewResource::class => ['view', 'update'],
-            ManageCompany::class  => ['manage'],
-        ],
-    ],
-],
-```
-
-Resources support the `view`, `create`, `update` and `delete` permissions. Filament pages (such as `ManageCompany`)
-only support `manage`. Resources or pages that are not listed are not accessible for that role.
-
-You can check a permission yourself with `$user->hasPermission(PageResource::class, 'update')`.
-
-> Roles used to be defined via the `UserRole` enum. This is deprecated since version 1.2 and will
-> be removed in version 2, where roles will be managed in the admin panel.

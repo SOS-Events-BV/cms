@@ -2,16 +2,17 @@
 
 namespace SOSEventsBV\Cms;
 
-use Filament\Support\Assets\Asset;
-use Filament\Support\Facades\FilamentAsset;
-use Filament\Support\Facades\FilamentIcon;
+use Illuminate\Support\Facades\Event;
 use Illuminate\View\Compilers\BladeCompiler;
 use SOSEventsBV\Cms\Commands\CreateCustomBlock;
 use SOSEventsBV\Cms\Commands\FetchCurrencies;
 use SOSEventsBV\Cms\Commands\FetchReviews;
+use SocialiteProviders\Manager\SocialiteWasCalled;
+use SocialiteProviders\Microsoft\MicrosoftExtendSocialite;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use DutchCodingCompany\FilamentSocialite\Events\Login;
 
 class CmsServiceProvider extends PackageServiceProvider
 {
@@ -52,11 +53,28 @@ class CmsServiceProvider extends PackageServiceProvider
 
     public function packageRegistered(): void
     {
-        //
+        // Set Microsoft Entra values in config file
+        config()->set('services.microsoft', [
+            ...config('cms.services.microsoft'),
+            'redirect' => rtrim(config('app.url'), '/') . '/admin/oauth/callback/microsoft',
+        ]);
     }
 
     public function packageBooted(): void
     {
+        // Register the Microsoft driver for Socialite (used for Microsoft login in Filament)
+        Event::listen(SocialiteWasCalled::class, [MicrosoftExtendSocialite::class, 'handle']);
+
+        // Sync the app roles and profile photo from Microsoft Entra ID on every successful login.
+        Event::listen(Login::class, function (Login $event) {
+            $avatar = $event->oauthUser->avatar ?? null;
+
+            $event->socialiteUser->getUser()->update([
+                'roles' => $event->oauthUser->roles ?? [],
+                'avatar' => $avatar ? 'data:image/jpeg;base64,' . $avatar : null,
+            ]);
+        });
+
         // Load translation overrides for other packages from lang/vendor/{namespace}
         $this->callAfterResolving('translation.loader', function ($loader) {
             $loader->addPath(__DIR__ . '/../lang');

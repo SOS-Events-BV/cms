@@ -33,28 +33,6 @@ return [
     ],
 
     /**
-     * Add roles to use in the CMS panel
-     */
-    'roles' => [
-        'admin' => [
-            'label' => 'Administrator',
-            'super_admin' => true
-        ],
-        'editor' => [
-            'label' => 'Editor',
-            'permissions' => [
-                PageResource::class            => ['view', 'create', 'update'],
-                CategoryResource::class        => ['view', 'create', 'update'],
-                ProductResource::class         => ['view', 'create', 'update'],
-                EventResource::class           => ['view', 'create', 'update'],
-                FaqPageQuestionResource::class => ['view', 'create', 'update'],
-                ReviewResource::class          => ['view', 'update'],
-            ]
-        ],
-        // ... (Add more roles here)
-    ],
-
-    /**
      * Specify the routing settings for the Page model. These will be used for the Page model.
      */
     'routing' => [
@@ -103,7 +81,15 @@ return [
             'url' => env('CMS_REVIEW_API_URL', 'https://reageren.sosevents.nl/api'),
             'api_key' => env('CMS_REVIEW_API_KEY'),
             'shop_id' => env('CMS_REVIEW_API_SHOP_ID'),
-        ]
+        ],
+
+        'microsoft' => [
+            'client_id' => env('CMS_MICROSOFT_CLIENT_ID'),
+            'client_secret' => env('CMS_MICROSOFT_CLIENT_SECRET'),
+            'tenant' => env('CMS_MICROSOFT_TENANT_ID'),
+            'include_avatar' => true,
+            'include_avatar_size' => '120x120',
+        ],
     ],
 
     /**

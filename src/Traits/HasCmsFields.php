@@ -2,100 +2,43 @@
 
 namespace SOSEventsBV\Cms\Traits;
 
-use Filament\Panel;
-
-/**
- * @property bool $is_active
- */
 trait HasCmsFields
 {
+    public function initializeHasCmsFields(): void
+    {
+        $this->mergeCasts(['roles' => 'array']);
+        $this->mergeFillable(['roles', 'avatar']);
+
+        // The avatar is a base64 data URI, keep it out of arrays/JSON
+        $this->hidden[] = 'avatar';
+    }
+
     /**
-     * Initialize the trait and add is_active and role to fillable, so they can be changed in the Filament panel.
+     * Get all roles of the User
+     * 
+     * @return array<string>
+     */
+    public function getRoles(): array
+    {
+        return $this->roles ?? [];
+    }
+
+    /**
+     * Check if the user has the given role, or one of the given roles.
      *
-     * @return void
+     * @param  string|array<string>  $roles
      */
-    protected function initializeHasCmsFields(): void
+    public function hasRole(string|array $roles): bool
     {
-        $this->mergeFillable(['is_active', 'role']);
+        return array_intersect((array) $roles, $this->getRoles()) !== [];
     }
 
     /**
-     * Checks if the user is active.
-     *
-     * @return bool
+     * Used by Filament when the User model implements Filament\Models\Contracts\HasAvatar.
+     * Returns null when there is no avatar, so Filament falls back to the initials.
      */
-    public function isActive(): bool
+    public function getFilamentAvatarUrl(): ?string
     {
-        return $this->is_active;
-    }
-
-    /**
-     * Get the user's role.
-     *
-     * @return string
-     */
-    public function getRole(): string
-    {
-        return $this->role;
-    }
-
-    public function getRoleConfig(): array
-    {
-        return config('cms.roles.' . $this->role);
-    }
-
-    /**
-     * Returns if the user is a super admin.
-     * @return bool
-     */
-    public function isSuperAdmin(): bool
-    {
-        return $this->getRole() == 'admin' || ($this->getRoleConfig()['super_admin'] ?? false);
-    }
-
-    /**
-     * Returns if the user is an Admin.
-     * @deprecated since 1.2, will be removed in 2.0. Please use $user->isSuperAdmin() instead.
-     * @return bool
-     */
-    public function isAdmin(): bool
-    {
-        return $this->isSuperAdmin();
-    }
-
-    /**
-     * Returns if the user is an Editor.
-     * @deprecated since 1.2, will be removed in 2.0. Please use $user->getRole() or $user->hasPermission() instead.
-     * @return bool
-     */
-    public function isEditor(): bool
-    {
-        return $this->getRole() == 'editor';
-    }
-
-    /**
-     * Returns if the user has permission to perform an action on a class.
-     * @param string $class
-     * @param string $action
-     * @return bool
-     */
-    public function hasPermission(string $class, string $action): bool
-    {
-        if (empty($this->role)) return false;
-
-        if ($this->getRoleConfig()['super_admin'] ?? false) return true;
-
-        return in_array($action, $this->getRoleConfig()['permissions'][$class] ?? []);
-    }
-
-    /**
-     * Checks if the user can access the CMS panel.
-     *
-     * @param Panel $panel
-     * @return bool
-     */
-    public function canAccessPanel(Panel $panel): bool
-    {
-        return $this->isActive();
+        return $this->avatar;
     }
 }

@@ -14,12 +14,8 @@ use SOSEventsBV\Cms\Resources\Reviews\Pages\EditReview;
 use SOSEventsBV\Cms\Resources\Reviews\Pages\ListReviews;
 use SOSEventsBV\Cms\Resources\Reviews\Schemas\ReviewForm;
 use SOSEventsBV\Cms\Resources\Reviews\Tables\ReviewsTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
-
 class ReviewResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = Review::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedStar;

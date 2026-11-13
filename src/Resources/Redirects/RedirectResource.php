@@ -18,14 +18,10 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use SOSEventsBV\Cms\Models\Redirect;
 use SOSEventsBV\Cms\Resources\Redirects\Pages\ManageRedirects;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 use UnitEnum;
-
 
 class RedirectResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = Redirect::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowsRightLeft;

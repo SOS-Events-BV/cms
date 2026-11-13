@@ -13,12 +13,9 @@ use SOSEventsBV\Cms\Resources\Events\Pages\EditEvent;
 use SOSEventsBV\Cms\Resources\Events\Pages\ListEvents;
 use SOSEventsBV\Cms\Resources\Events\Schemas\EventForm;
 use SOSEventsBV\Cms\Resources\Events\Tables\EventsTable;
-use SOSEventsBV\Cms\Traits\HasCmsPermissions;
 
 class EventResource extends Resource
 {
-    use HasCmsPermissions;
-
     protected static ?string $model = Event::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendar;

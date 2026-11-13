@@ -4,6 +4,8 @@ namespace SOSEventsBV\Cms;
 
 use Cocosmos\FilamentStickySaveBar\Enums\ShowOn;
 use Cocosmos\FilamentStickySaveBar\StickySaveBarPlugin;
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
 use Filament\Navigation\NavigationGroup;
@@ -18,7 +20,6 @@ use SOSEventsBV\Cms\Resources\Pages\PageResource;
 use SOSEventsBV\Cms\Resources\Products\ProductResource;
 use SOSEventsBV\Cms\Resources\Redirects\RedirectResource;
 use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
-use SOSEventsBV\Cms\Resources\Users\UserResource;
 
 class CmsPlugin implements Plugin
 {
@@ -73,7 +74,6 @@ class CmsPlugin implements Plugin
     {
         $resources = [
             PageResource::class,
-            UserResource::class,
             RedirectResource::class,
         ];
 
@@ -114,6 +114,15 @@ class CmsPlugin implements Plugin
             ->plugins([
                 StickySaveBarPlugin::make()
                     ->showOn(ShowOn::Dirty),
+
+                FilamentSocialitePlugin::make()
+                    ->providers([
+                        Provider::make('microsoft')
+                            ->label('Microsoft')
+                            // ->icon('bi-microsoft')
+                            ->color('#2f2f2f'),
+                    ])
+                    ->registration(true),
             ]);
     }
 
