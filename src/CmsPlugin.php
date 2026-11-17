@@ -2,6 +2,7 @@
 
 namespace SOSEventsBV\Cms;
 
+use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Cocosmos\FilamentStickySaveBar\Enums\ShowOn;
 use Cocosmos\FilamentStickySaveBar\StickySaveBarPlugin;
 use Composer\InstalledVersions;
@@ -162,7 +163,14 @@ class CmsPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $locales = ['nl', 'en'];
+
+            $switch->locales($locales)
+                ->flags(collect($locales)->mapWithKeys(fn (string $locale) => [
+                    $locale => asset("vendor/cms/flags/{$locale}.svg"),
+                ])->all());
+        });
     }
 
     public static function make(): static
