@@ -2,14 +2,14 @@
 
 namespace SOSEventsBV\Cms\Api;
 
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Http\Client\RequestException;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
+use SOSEventsBV\Cms\Traits\HasRestMethods;
 
 class MailCampaignsClient extends ApiClient
 {
+    use HasRestMethods;
+
     protected string $url;
     protected string $apiKey;
     protected string $apiToken;
@@ -44,33 +44,5 @@ class MailCampaignsClient extends ApiClient
     protected function name(): string
     {
         return 'MailCampaigns';
-    }
-
-    /**
-     * Make a GET request to the MailCampaigns API.
-     *
-     * @param string $endpoint
-     * @param array $parameters Query parameters.
-     * @return Collection
-     * @throws RequestException
-     * @throws ConnectionException
-     */
-    public function get(string $endpoint, array $parameters = []): Collection
-    {
-        return $this->send('GET', $endpoint, $parameters);
-    }
-
-    /**
-     * Make a POST request to the MailCampaigns API.
-     *
-     * @param string $endpoint
-     * @param array $parameters JSON body.
-     * @return Collection
-     * @throws RequestException
-     * @throws ConnectionException
-     */
-    public function post(string $endpoint, array $parameters = []): Collection
-    {
-        return $this->send('POST', $endpoint, $parameters);
     }
 }

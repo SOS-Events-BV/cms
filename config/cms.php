@@ -73,7 +73,7 @@ return [
             'version' => env('CMS_LEISUREKING_API_VERSION', 'v4'),
             'username' => env('CMS_LEISUREKING_API_USERNAME'),
             'password' => env('CMS_LEISUREKING_API_PASSWORD'),
-            'environment' => env('CMS_LEISUREKING_API_ENVIRONMENT', 'test'),
+            'environment' => env('CMS_LEISUREKING_API_ENVIRONMENT', 'production'),
             'shophid' => env('CMS_LEISUREKING_API_SHOPHID'),
         ],
 
@@ -84,9 +84,15 @@ return [
         ],
 
         'mailcampaigns' => [
-            'url' => env('CMS_MAILCAMPAIGNS_API_URL'),
+            'url' => env('CMS_MAILCAMPAIGNS_API_URL', 'https://api.mailcampaigns.nl/api/v2.0'),
             'api_key' => env('CMS_MAILCAMPAIGNS_API_KEY'),
             'api_token' => env('CMS_MAILCAMPAIGNS_API_TOKEN'),
+        ],
+
+        'sosevents' => [
+            'url' => env('CMS_SOS_EVENTS_API_URL', 'https://api.sosevents.nl/v1'),
+            'api_key' => env('CMS_SOS_EVENTS_API_KEY'),
+            'api_secret' => env('CMS_SOS_EVENTS_API_SECRET'),
         ],
 
         'microsoft' => [
