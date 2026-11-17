@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 use stdClass;
 
-class DividerBlock extends Component
+class SpacerBlock extends Component
 {
     public int $px;
 
@@ -26,6 +26,6 @@ class DividerBlock extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('cms::components.blocks.divider-block');
+        return view('cms::components.blocks.spacer-block');
     }
 }

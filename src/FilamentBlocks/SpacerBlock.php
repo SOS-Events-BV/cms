@@ -6,15 +6,15 @@ use Filament\Forms\Components\Builder\Block;
 use Filament\Forms\Components\TextInput;
 use Filament\Support\Icons\Heroicon;
 
-class DividerBlock
+class SpacerBlock
 {
     public static function make(): Block
     {
-        return Block::make('divider-block')
-            ->label('Divider')
-            ->icon(Heroicon::Divide)
+        return Block::make('spacer-block')
+            ->label('Witruimte')
+            ->icon(Heroicon::ArrowsUpDown)
             ->schema([
-                TextInput::make('px')->numeric()->suffix('px')->hiddenLabel(),
+                TextInput::make('px')->numeric()->suffix('px')->label('Hoogte'),
             ]);
     }
 }

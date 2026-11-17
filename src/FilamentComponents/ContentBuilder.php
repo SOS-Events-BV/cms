@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use SOSEventsBV\Cms\FilamentBlocks\ButtonGroupBlock;
 use SOSEventsBV\Cms\FilamentBlocks\ContentBlock;
 use SOSEventsBV\Cms\FilamentBlocks\CustomHtmlBlock;
-use SOSEventsBV\Cms\FilamentBlocks\DividerBlock;
+use SOSEventsBV\Cms\FilamentBlocks\SpacerBlock;
 use SOSEventsBV\Cms\FilamentBlocks\FaqBlock;
 use SOSEventsBV\Cms\FilamentBlocks\FormBuilderBlock;
 use SOSEventsBV\Cms\FilamentBlocks\HeadingBlock;
@@ -36,7 +36,7 @@ class ContentBuilder
             FaqBlock::make(),
             ButtonGroupBlock::make(),
             VideoBlock::make(),
-            DividerBlock::make(),
+            SpacerBlock::make(),
             TwoColumnBlock::make($directory),
             ImageSliderBlock::make($directory),
             FormBuilderBlock::make(),
@@ -63,7 +63,7 @@ class ContentBuilder
             FaqBlock::make(),
             ButtonGroupBlock::make(),
             VideoBlock::make(),
-            DividerBlock::make(),
+            SpacerBlock::make(),
             ImageSliderBlock::make($directory),
             LeisureKingFrame::make(),
             ReadMoreBlock::make(),
