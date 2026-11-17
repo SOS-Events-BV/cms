@@ -22,6 +22,8 @@ use SOSEventsBV\Cms\Resources\Pages\PageResource;
 use SOSEventsBV\Cms\Resources\Products\ProductResource;
 use SOSEventsBV\Cms\Resources\Redirects\RedirectResource;
 use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
+use SOSEventsBV\Cms\Widgets\LastEditedPages;
+use SOSEventsBV\Cms\Widgets\ReviewStats;
 
 class CmsPlugin implements Plugin
 {
@@ -130,6 +132,10 @@ class CmsPlugin implements Plugin
                         ->icon(Heroicon::InformationCircle)
                         ->disabled(),
                 ]
+            ])
+            ->widgets([
+                ReviewStats::class,
+                LastEditedPages::class
             ])
             ->plugins([
                 StickySaveBarPlugin::make()
