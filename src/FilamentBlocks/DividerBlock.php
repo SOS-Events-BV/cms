@@ -10,7 +10,7 @@ class DividerBlock
 {
     public static function make(): Block
     {
-        return Block::make('divider_block')
+        return Block::make('divider-block')
             ->label('Divider')
             ->icon(Heroicon::Divide)
             ->schema([

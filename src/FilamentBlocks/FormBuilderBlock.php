@@ -15,7 +15,7 @@ class FormBuilderBlock
 {
     public static function make(): Block
     {
-        return Block::make('form_builder_block')
+        return Block::make('form-builder-block')
             ->label('Formulier maker')
             ->icon(Heroicon::Bars4)
             ->schema([

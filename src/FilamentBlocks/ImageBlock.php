@@ -19,7 +19,7 @@ class ImageBlock
      */
     public static function make(string $directory = 'page'): Block
     {
-        return Block::make('image_block')
+        return Block::make('image-block')
             ->label('Afbeelding')
             ->icon(Heroicon::Photo)
             ->schema([
@@ -30,7 +30,7 @@ class ImageBlock
                     ->image()
                     ->imageEditor()
                     ->getUploadedFileNameForStorageUsing(
-                    // UUID-based, unique file name with original title + hash and extension
+                        // UUID-based, unique file name with original title + hash and extension
                         fn(TemporaryUploadedFile $file): string => Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
                             . '_' . Str::uuid()
                             . '.' . $file->getClientOriginalExtension()

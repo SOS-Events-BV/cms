@@ -15,7 +15,7 @@ class TwoColumnBlock
 {
     public static function make(string $directory = 'page'): Block
     {
-        return Block::make('two_column_block')
+        return Block::make('two-column-block')
             ->label('Twee kolommen')
             ->icon(Heroicon::ViewColumns)
             ->columns(2)

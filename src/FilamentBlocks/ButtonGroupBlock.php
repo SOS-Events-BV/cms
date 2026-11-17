@@ -13,7 +13,7 @@ class ButtonGroupBlock
 {
     public static function make(): Block
     {
-        return Block::make('button_group_block')
+        return Block::make('button-group-block')
             ->label('Knop(pen) / link(s)')
             ->icon(Heroicon::CursorArrowRays)
             ->schema([

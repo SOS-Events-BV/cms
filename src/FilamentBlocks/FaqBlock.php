@@ -12,7 +12,7 @@ class FaqBlock
 {
     public static function make(): Block
     {
-        return Block::make('faq_block')
+        return Block::make('faq-block')
             ->label('FAQ blok')
             ->icon(Heroicon::QuestionMarkCircle)
             ->schema([

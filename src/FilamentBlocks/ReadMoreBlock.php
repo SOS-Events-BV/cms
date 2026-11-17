@@ -10,7 +10,7 @@ class ReadMoreBlock
 {
     public static function make(): Block
     {
-        return Block::make('read_more_block')
+        return Block::make('read-more-block')
             ->label('Lees meer')
             ->icon(Heroicon::BookOpen)
             ->schema([

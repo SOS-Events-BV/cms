@@ -43,7 +43,7 @@ class PageController
         $page = Page::where([['slug', $slug], ['is_active', true]])->firstOrFail();
 
         // Find the form block in the page content
-        $pageForm = collect($page->content_objects)->firstWhere('type', 'form_builder_block');
+        $pageForm = collect($page->content_objects)->firstWhere('type', 'form-builder-block');
 
         if (!$pageForm || !isset($pageForm->data->form_inputs)) {
             abort(404); // Form block or inputs not found
@@ -94,7 +94,7 @@ class PageController
     {
         $page = Page::where([['slug', $slug], ['is_active', true]])->firstOrFail();
 
-        $formBlock = collect($page->content_objects)->firstWhere('type', 'form_builder_block');
+        $formBlock = collect($page->content_objects)->firstWhere('type', 'form-builder-block');
 
         if (!$formBlock || !$formBlock->data) {
             abort(404); // Form block not found
