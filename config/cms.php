@@ -83,6 +83,12 @@ return [
             'shop_id' => env('CMS_REVIEW_API_SHOP_ID'),
         ],
 
+        'mailcampaigns' => [
+            'url' => env('CMS_MAILCAMPAIGNS_API_URL'),
+            'api_key' => env('CMS_MAILCAMPAIGNS_API_KEY'),
+            'api_token' => env('CMS_MAILCAMPAIGNS_API_TOKEN'),
+        ],
+
         'microsoft' => [
             'client_id' => env('CMS_MICROSOFT_CLIENT_ID'),
             'client_secret' => env('CMS_MICROSOFT_CLIENT_SECRET'),

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\RequestException;
+use Illuminate\Support\Collection;
 use Exception;
 use InvalidArgumentException;
 
@@ -31,7 +32,7 @@ class LeisureKingClient extends ApiClient
      *
      * @return PendingRequest
      */
-    public function client(): PendingRequest
+    protected function client(): PendingRequest
     {
         return Http::baseUrl($this->baseUrl)
             ->acceptJson()
@@ -44,11 +45,11 @@ class LeisureKingClient extends ApiClient
      * @param string $endpoint Endpoint to request, without `https://www.api.leisureking.eu/public`, start with / and without version. `https://www.api.leisureking.eu/public/assortment/get/v4` becomes `/assortment/get`.
      * @param array $data The POST data to be added.
      * @param string|null $version The version of the API to use. If not provided, the version from the config will be used.
-     * @return array|int|string|null The response data. Returns null if no data is returned.
+     * @return Collection The response data.
      * @throws ConnectionException
      * @throws RequestException
      */
-    public function request(string $endpoint, array $data = [], ?string $version = null): array|int|string|null
+    public function request(string $endpoint, array $data = [], ?string $version = null): Collection
     {
         // Create payload, with required data and given data
         $payload = array_merge($data, [
@@ -59,20 +60,17 @@ class LeisureKingClient extends ApiClient
         // Create the URL, remove / from string
         $url = trim($endpoint, '/') . '/' . ($version ?? $this->version);
 
-        try {
-            return $this->client()
-                ->post($url, $payload)
-                ->throw()
-                ->json('data');
-        } catch (Exception $e) {
-            Log::error("LeisureKing API Request Error: {$e->getMessage()}", [
-                'endpoint' => $endpoint,
-                'url' => $url,
-                'payload' => $payload,
-            ]);
+        return $this->send('POST', $url, $payload, 'data');
+    }
 
-            throw $e;
-        }
+    /**
+     * Name of the API, used in log messages.
+     *
+     * @return string
+     */
+    protected function name(): string
+    {
+        return 'LeisureKing';
     }
 
     /**
