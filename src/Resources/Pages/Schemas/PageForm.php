@@ -20,8 +20,8 @@ class PageForm
     {
         return $schema
             ->components([
-                Section::make('SEO Instellingen')
-                    ->description('Beheer de SEO instellingen voor deze pagina.')
+                Section::make(__('cms::seo.title'))
+                    ->description(__('cms::seo.description'))
                     ->aside()
                     ->schema([
                         // SEO Settings component
@@ -30,16 +30,16 @@ class PageForm
                         Grid::make(2)->schema([
                             TextEntry::make('url')
                                 ->hiddenOn('create')
-                                ->label('Bekijk pagina')
-                                ->state('Klik hier')
-                                ->url(fn (Get $get, $record) => $get('is_active') && config('cms.routes.page') ? route(config('cms.routes.page'), $record->slug) : null)
+                                ->label(__('cms::common.view'))
+                                ->state(__('cms::common.click_here'))
+                                ->url(fn(Get $get, $record) => $get('is_active') && config('cms.routes.page') ? route(config('cms.routes.page'), $record->slug) : null)
                                 ->icon(Heroicon::Link)
-                                ->color(fn (Get $get) => $get('is_active') ? 'primary' : 'gray')
+                                ->color(fn(Get $get) => $get('is_active') ? 'primary' : 'gray')
                                 ->openUrlInNewTab(),
 
                             // Toggle for active status
                             Toggle::make('is_active')
-                                ->label('Pagina actief')
+                                ->label(__('cms::common.active'))
                                 ->inline(false)
                                 ->default(true)
                                 ->live(),
@@ -48,12 +48,12 @@ class PageForm
                         // Created by and updated by with timestamps
                         Grid::make(2)->hiddenOn('create')->schema([
                             TextEntry::make('created_at')
-                                ->label('Aangemaakt op')
+                                ->label(__('cms::common.created_at'))
                                 ->dateTime('d-m-Y H:i')
                                 ->color('gray'),
 
                             TextEntry::make('updated_at')
-                                ->label('Gewijzigd op')
+                                ->label(__('cms::common.updated_at'))
                                 ->dateTime('d-m-Y H:i')
                                 ->color('gray'),
                         ]),
@@ -61,14 +61,14 @@ class PageForm
 
                 // Unique slug to the page
                 TextInput::make('slug')
-                    ->label('Pagina slug')
-                    ->afterLabel('Zoals `pagina` of `subpagina/pagina`')
+                    ->label(__('cms::pages.slug'))
+                    ->afterLabel(__('cms::pages.helpers.slug'))
                     ->required()
                     ->unique(ignorable: fn($record) => $record)
                     ->helperText(
-                        fn ($record, Get $get) => $get('slug') ?
-                            'Dit wordt de URL van deze pagina: ' . route(config('cms.routes.page'), $get('slug'))
-                        : null
+                        fn($record, Get $get) => $get('slug') ?
+                            __('cms::pages.helpers.url', ['url' => route(config('cms.routes.page'), $get('slug'))])
+                            : null
                     )
                     ->live(debounce: 500)
                     ->columnSpanFull(),
@@ -76,7 +76,7 @@ class PageForm
                 // Page Builder
                 ContentBuilder::make('content'),
 
-                Section::make('Extra velden')
+                Section::make(__('cms::pages.additional_fields'))
                     ->columns(2)
                     ->schema(CmsPlugin::get()->getAdditionalPageInputs())
                     ->columnSpanFull()

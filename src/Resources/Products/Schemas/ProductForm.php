@@ -47,7 +47,7 @@ class ProductForm
     {
         return Action::make('fetchAssortment')
             ->icon(Heroicon::ArrowPath)
-            ->tooltip('Vul velden in vanuit LeisureKing')
+            ->tooltip(__('cms::products.leisureking.fetch_tooltip'))
             ->action(function (Get $get, Set $set) {
                 $leisurekingId = $get('leisureking_id');
                 if (empty($leisurekingId)) return null; // Return null if leisureking_id is empty
@@ -62,7 +62,7 @@ class ProductForm
                     ]);
                 } catch (\Exception $e) {
                     return Notification::make()
-                        ->title('LeisureKing Error')
+                        ->title(__('cms::products.leisureking.error_title'))
                         ->body($e->getMessage())
                         ->danger()
                         ->send();
@@ -129,8 +129,8 @@ class ProductForm
 
                 // Returns success notification
                 return Notification::make()
-                    ->title('LeisureKing')
-                    ->body('Velden succesvol ingevuld!')
+                    ->title(__('cms::products.leisureking.success_title'))
+                    ->body(__('cms::products.leisureking.success_body'))
                     ->success()
                     ->send();
             });
@@ -147,12 +147,12 @@ class ProductForm
         return Action::make('excluded_fields_lk_sync_' . $field)
             ->label(
                 fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
-                    ? 'LK sync uitgeschakeld'
-                    : 'LK sync ingeschakeld'
+                    ? __('cms::products.leisureking.sync_disabled')
+                    : __('cms::products.leisureking.sync_enabled')
             )
             ->tooltip(fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
-                ? 'LK sync uitgeschakeld'
-                : 'LK sync ingeschakeld')
+                ? __('cms::products.leisureking.sync_disabled')
+                : __('cms::products.leisureking.sync_enabled'))
             ->icon(Heroicon::ArrowPath)
             ->color(
                 fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
@@ -175,33 +175,33 @@ class ProductForm
                     ->tabs([
 
                         // ─── 1. BASIS ────────────────────────────────────────
-                        Tabs\Tab::make('Basis')
+                        Tabs\Tab::make(__('cms::products.tabs.basic'))
                             ->schema([
                                 Grid::make(2)->schema([
                                     TextInput::make('slug')
-                                        ->label('Pagina slug')
-                                        ->afterLabel('Zoals `pagina` of `subpagina/pagina`')
+                                        ->label(__('cms::products.slug'))
+                                        ->afterLabel(__('cms::pages.helpers.slug'))
                                         ->required()
                                         ->unique(ignorable: fn($record) => $record),
 
                                     TextInput::make('name')
-                                        ->label('Productnaam')
+                                        ->label(__('cms::products.name'))
                                         ->required()
                                         ->suffixAction(static::lkSyncAction('name')),
                                 ]),
 
                                 RichEditor::make('summary')
-                                    ->label('Samenvatting')
+                                    ->label(__('cms::products.summary'))
                                     ->columnSpanFull()
                                     ->hintAction(self::lkSyncAction('summary')),
 
                                 RichEditor::make('description')
-                                    ->label('Omschrijving')
+                                    ->label(__('cms::products.description'))
                                     ->columnSpanFull()
                                     ->hintAction(self::lkSyncAction('description')),
 
                                 SpatieMediaLibraryFileUpload::make('images')
-                                    ->label('Afbeeldingen')
+                                    ->label(__('cms::products.images'))
                                     ->collection('product')
                                     ->disk('public')
                                     ->multiple()
@@ -218,23 +218,23 @@ class ProductForm
                                     ->appendFiles(),
 
                                 // ── Optionele velden ──────────────────────────
-                                Fieldset::make('Optionele velden')
+                                Fieldset::make(__('cms::products.optional_fields'))
                                     ->schema([
                                         TextInput::make('location')
-                                            ->label('Locatie')
+                                            ->label(__('cms::products.location'))
                                             ->prefixIcon(Heroicon::MapPin)
                                             ->columnSpanFull()
                                             ->suffixAction(static::lkSyncAction('location')),
 
                                         TextInput::make('min_persons')
                                             ->minValue(0)
-                                            ->label('Minimaal aantal personen')
+                                            ->label(__('cms::products.min_persons'))
                                             ->numeric()
                                             ->suffixAction(static::lkSyncAction('min_persons')),
 
                                         TextInput::make('max_persons')
                                             ->minValue(1)
-                                            ->label('Maximaal aantal personen')
+                                            ->label(__('cms::products.max_persons'))
                                             ->numeric()
                                             ->suffixAction(static::lkSyncAction('max_persons')),
                                     ])
@@ -242,18 +242,18 @@ class ProductForm
                                     ->columnSpanFull(),
 
                                 // ── Pagina instellingen ───────────────────────
-                                Fieldset::make('Pagina instellingen')
+                                Fieldset::make(__('cms::products.page_settings'))
                                     ->schema([
                                         Toggle::make('is_active')
-                                            ->label('Product actief')
+                                            ->label(__('cms::products.is_active'))
                                             ->inline(false)
                                             ->default(true),
 
                                         // Clickable URL to the page
                                         TextEntry::make('url')
                                             ->hiddenOn('create')
-                                            ->label('Bekijk product')
-                                            ->state('Klik hier')
+                                            ->label(__('cms::products.view'))
+                                            ->state(__('cms::common.click_here'))
                                             ->url(
                                                 fn($record) => config('cms.routes.product') ?
                                                     route(config('cms.routes.product'), $record->slug) :
@@ -272,12 +272,12 @@ class ProductForm
                                     ->hiddenOn('create')
                                     ->schema([
                                         TextEntry::make('created_at')
-                                            ->label('Aangemaakt op')
+                                            ->label(__('cms::common.created_at'))
                                             ->dateTime('d-m-Y H:i')
                                             ->color('gray'),
 
                                         TextEntry::make('updated_at')
-                                            ->label('Gewijzigd op')
+                                            ->label(__('cms::common.updated_at'))
                                             ->dateTime('d-m-Y H:i')
                                             ->color('gray'),
                                     ])
@@ -285,18 +285,18 @@ class ProductForm
                             ]),
 
                         // ─── 2. PRIJZEN & BOEKEN ─────────────────────────────
-                        Tabs\Tab::make('Prijzen & boeken')
+                        Tabs\Tab::make(__('cms::products.tabs.prices'))
                             ->schema([
-                                Section::make('Prijs instellingen')
+                                Section::make(__('cms::products.prices.heading'))
                                     ->aside()
-                                    ->description('Minimaal 1 prijs in euro is verplicht. Geef aan per prijs of het inclusief of exclusief BTW is. Optioneel kan je andere valuta\'s toevoegen en een label toevoegen.')
+                                    ->description(__('cms::products.prices.description'))
                                     ->schema([
                                         Repeater::make('prices')
-                                            ->label('Prijzen')
+                                            ->label(__('cms::products.prices.label'))
                                             ->relationship('prices')
-                                            ->addActionLabel('Prijs toevoegen')
+                                            ->addActionLabel(__('cms::products.prices.add_label'))
                                             ->collapsed()
-                                            ->itemLabel(fn(array $state): ?string => trim(($state['label'] ?? 'Prijs') . ' – ' . ($state['amount'] ?? '')))
+                                            ->itemLabel(fn(array $state): ?string => trim(($state['label'] ?? __('cms::products.prices.amount')) . ' – ' . ($state['amount'] ?? '')))
                                             ->hintAction(self::lkSyncAction('prices'))
                                             ->grid()
                                             ->minItems(1)
@@ -305,19 +305,19 @@ class ProductForm
                                                     $euroId = Currency::where('code', 'EUR')->value('id');
                                                     $hasEuro = collect($value)->contains('currency_id', $euroId);
                                                     if (!$hasEuro) {
-                                                        $fail('Een prijs in Euro (EUR) is verplicht.');
+                                                        $fail(__('cms::products.prices.euro_required'));
                                                     }
                                                 }
                                             )
                                             ->schema([
                                                 Select::make('currency_id')
-                                                    ->label('Valuta')
+                                                    ->label(__('cms::products.prices.currency'))
                                                     ->options(Currency::all()->pluck('name', 'id'))
                                                     ->required()
                                                     ->live(),
 
                                                 TextInput::make('amount')
-                                                    ->label('Prijs')
+                                                    ->label(__('cms::products.prices.amount'))
                                                     ->inputMode('decimal')
                                                     ->step(0.01)
                                                     ->required()
@@ -338,17 +338,17 @@ class ProductForm
                                                     ),
 
                                                 Toggle::make('includes_vat')
-                                                    ->label('Inclusief BTW')
+                                                    ->label(__('cms::products.prices.includes_vat'))
                                                     ->default(true),
 
                                                 TextInput::make('label')
-                                                    ->label('Label (optioneel)')
-                                                    ->belowContent('Bijvoorbeeld: Volwassenentarief of Kindertarief'),
+                                                    ->label(__('cms::products.prices.price_label'))
+                                                    ->belowContent(__('cms::products.prices.helpers.price_label')),
 
-                                                Fieldset::make('Tijdblok (optioneel)')
+                                                Fieldset::make(__('cms::products.prices.time_block'))
                                                     ->schema([
-                                                        TimePicker::make('from_time')->label('Van'),
-                                                        TimePicker::make('to_time')->label('Tot'),
+                                                        TimePicker::make('from_time')->label(__('cms::common.time_schemes.start_time')),
+                                                        TimePicker::make('to_time')->label(__('cms::common.time_schemes.end_time')),
                                                     ])
                                                     ->columns(2)
                                                     ->columnSpanFull(),
@@ -358,37 +358,37 @@ class ProductForm
                                     ])
                                     ->columnSpanFull(),
 
-                                Section::make('Boek optie')
+                                Section::make(__('cms::products.book_option.heading'))
                                     ->aside()
-                                    ->description("Kies hoe bezoekers dit product kunnen boeken. Bij 'Boek direct' is een LeisureKing Boeking Module verplicht.")
+                                    ->description(__('cms::products.book_option.description'))
                                     ->schema([
                                         ToggleButtons::make('book_option')
-                                            ->label('Boek optie')
+                                            ->label(__('cms::products.book_option.label'))
                                             ->inline()
                                             ->live()
                                             ->required()
                                             ->options([
-                                                'book_now' => 'Boek direct',
-                                                'quotation' => 'Offerte',
-                                                'forward' => 'Doorverwijzen naar...',
+                                                'book_now' => __('cms::products.book_option.options.book_now'),
+                                                'quotation' => __('cms::products.book_option.options.quotation'),
+                                                'forward' => __('cms::products.book_option.options.forward'),
                                             ])
                                             ->default('book_now'),
 
                                         TextInput::make('forward_url')
-                                            ->label('Doorverwijzen naar URL')
+                                            ->label(__('cms::products.book_option.forward_url'))
                                             ->required()
                                             ->url()
                                             ->hidden(fn(Get $get) => $get('book_option') !== 'forward'),
 
                                         TextInput::make('forward_title')
-                                            ->label('Titel doorverwijzing')
-                                            ->placeholder('Bijvoorbeeld: Je wordt doorverwezen naar de Veluwe Specialist.')
+                                            ->label(__('cms::products.book_option.forward_title'))
+                                            ->placeholder(__('cms::products.book_option.forward_title_placeholder'))
                                             ->required()
                                             ->hidden(fn(Get $get) => $get('book_option') !== 'forward'),
 
                                         TextInput::make('forward_description')
-                                            ->label('Beschrijving doorverwijzing')
-                                            ->placeholder('Voorbeeld: Veel plezier op de Veluwe Specialist!')
+                                            ->label(__('cms::products.book_option.forward_description'))
+                                            ->placeholder(__('cms::products.book_option.forward_description_placeholder'))
                                             ->required()
                                             ->hidden(fn(Get $get) => $get('book_option') !== 'forward'),
                                     ])
@@ -396,10 +396,10 @@ class ProductForm
                             ]),
 
                         // ─── 3. SEO ──────────────────────────────────────────
-                        Tabs\Tab::make('SEO')
+                        Tabs\Tab::make(__('cms::products.tabs.seo'))
                             ->schema([
-                                Section::make('SEO Instellingen')
-                                    ->description('Beheer de SEO instellingen voor dit product.')
+                                Section::make(__('cms::seo.title'))
+                                    ->description(__('cms::seo.description'))
                                     ->aside()
                                     ->schema([
                                         SeoSettings::make('product/og'),
@@ -408,23 +408,23 @@ class ProductForm
                             ]),
 
                         // ─── 4. FAQ ──────────────────────────────────────────
-                        Tabs\Tab::make('FAQ')
+                        Tabs\Tab::make(__('cms::products.tabs.faq'))
                             ->schema([
-                                Section::make('Veelgestelde vragen')
+                                Section::make(__('cms::products.faqs.heading'))
                                     ->aside()
-                                    ->description('Voeg veelgestelde vragen toe die op de productpagina worden getoond.')
+                                    ->description(__('cms::products.faqs.description'))
                                     ->schema([
                                         Repeater::make('faqs')
-                                            ->label('FAQ\'s')
-                                            ->addActionLabel('FAQ toevoegen')
+                                            ->label(__('cms::products.faqs.label'))
+                                            ->addActionLabel(__('cms::products.faqs.add_label'))
                                             ->collapsible()
                                             ->itemLabel(fn(array $state): ?string => $state['question'] ?? null)
                                             ->schema([
                                                 TextInput::make('question')
-                                                    ->label('Vraag')
+                                                    ->label(__('cms::products.faqs.question'))
                                                     ->required(),
                                                 RichEditor::make('answer')
-                                                    ->label('Antwoord')
+                                                    ->label(__('cms::products.faqs.answer'))
                                                     ->required(),
                                             ])
                                             ->default([]),
@@ -433,56 +433,56 @@ class ProductForm
                             ]),
 
                         // ─── 5. PAKKET & INTEGRATIE ──────────────────────────
-                        Tabs\Tab::make('Pakket & integratie')
+                        Tabs\Tab::make(__('cms::products.tabs.package'))
                             ->schema([
-                                Section::make('Arrangement instellingen')
+                                Section::make(__('cms::products.package.heading'))
                                     ->collapsed()
                                     ->aside()
-                                    ->description('Details voor het programma en tijdschema. Alleen van toepassing als dit product een arrangement is.')
+                                    ->description(__('cms::products.package.description'))
                                     ->schema([
                                         Toggle::make('is_package')
-                                            ->label('Dit product is een arrangement')
+                                            ->label(__('cms::products.package.is_package'))
                                             ->reactive(),
 
                                         Repeater::make('time_schemes')
-                                            ->label('Tijdschema\'s')
+                                            ->label(__('cms::products.package.time_schemes'))
                                             ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                                             ->hidden(fn(Get $get) => !$get('is_package'))
                                             ->schema([
                                                 TextInput::make('name')
-                                                    ->label('Naam programma')
-                                                    ->placeholder('bijv. Ochtendprogramma')
+                                                    ->label(__('cms::common.time_schemes.name'))
+                                                    ->placeholder(__('cms::common.time_schemes.name_placeholder'))
                                                     ->required(),
 
                                                 Repeater::make('rows')
-                                                    ->label('Onderdelen')
+                                                    ->label(__('cms::common.time_schemes.rows'))
                                                     ->grid(2)
                                                     ->schema([
                                                         Grid::make(2)->schema([
                                                             TimePicker::make('start_time')
-                                                                ->label('Van')
+                                                                ->label(__('cms::common.time_schemes.start_time'))
                                                                 ->required(),
                                                             TimePicker::make('end_time')
-                                                                ->label('Tot')
+                                                                ->label(__('cms::common.time_schemes.end_time'))
                                                                 ->required(),
                                                         ]),
                                                         TextInput::make('activity')
-                                                            ->label('Activiteit')
-                                                            ->placeholder('Ontvangst met koffie')
+                                                            ->label(__('cms::common.time_schemes.activity'))
+                                                            ->placeholder(__('cms::common.time_schemes.activity_placeholder'))
                                                             ->required(),
                                                     ])
-                                                    ->addActionLabel('Onderdeel toevoegen'),
+                                                    ->addActionLabel(__('cms::common.time_schemes.add_row')),
                                             ])
-                                            ->addActionLabel('Nieuw tijdschema toevoegen'),
+                                            ->addActionLabel(__('cms::common.time_schemes.add_label')),
                                     ])
                                     ->columnSpanFull(),
 
-                                Section::make('LeisureKing (optioneel)')
+                                Section::make(__('cms::products.leisureking.heading'))
                                     ->aside()
-                                    ->description('Vul hier het LeisureKing ID in. Hiermee kunnen we al bepaalde velden mee invullen.')
+                                    ->description(__('cms::products.leisureking.description'))
                                     ->schema([
                                         Select::make('leisureking_id')
-                                            ->label('LeisureKing ID')
+                                            ->label(__('cms::products.leisureking.id'))
                                             ->searchable()
                                             ->live()
                                             ->options(function () {
@@ -496,8 +496,8 @@ class ProductForm
                                             ->suffixAction(self::executeLkSyncAction()),
 
                                         TextInput::make('leisureking_bookingmodule_hash')
-                                            ->label('LeisureKing Boeking Module')
-                                            ->afterLabel('Dit is de hash achter /bm/...')
+                                            ->label(__('cms::products.leisureking.bookingmodule_hash'))
+                                            ->afterLabel(__('cms::products.leisureking.helpers.bookingmodule_hash'))
                                             ->requiredIf('book_option', 'book_now'),
                                     ])
                                     ->columnSpanFull(),

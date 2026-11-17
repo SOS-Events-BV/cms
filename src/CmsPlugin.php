@@ -2,6 +2,7 @@
 
 namespace SOSEventsBV\Cms;
 
+use BezhanSalleh\LanguageSwitch\LanguageSwitch;
 use Cocosmos\FilamentStickySaveBar\Enums\ShowOn;
 use Cocosmos\FilamentStickySaveBar\StickySaveBarPlugin;
 use Composer\InstalledVersions;
@@ -10,10 +11,11 @@ use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser;
 use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
-use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationGroup as FilamentNavigationGroup;
 use Filament\Panel;
 use Filament\Support\Icons\Heroicon;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
+use SOSEventsBV\Cms\Enums\NavigationGroup;
 use SOSEventsBV\Cms\Pages\ManageCompany;
 use SOSEventsBV\Cms\Resources\Categories\CategoryResource;
 use SOSEventsBV\Cms\Resources\Events\EventResource;
@@ -98,11 +100,11 @@ class CmsPlugin implements Plugin
                 ManageCompany::class
             ])
             ->resources($resources)
-            ->navigationGroups([
-                NavigationGroup::make()->label('Pagina\'s'),
-                NavigationGroup::make()->label('Producten'),
-                NavigationGroup::make()->label('Instellingen'),
-            ])
+            ->navigationGroups(collect(NavigationGroup::cases())
+                ->mapWithKeys(fn(NavigationGroup $group) => [
+                    $group->name => FilamentNavigationGroup::make(fn() => $group->getLabel()),
+                ])
+                ->all())
             ->spa() // Transitions between pages, smooth experience
             ->unsavedChangesAlerts() // Alert when changes are made and you wan't to quit the page
             ->sidebarCollapsibleOnDesktop() // Hide menu on desktop
@@ -110,14 +112,14 @@ class CmsPlugin implements Plugin
                 [
                     // View website button
                     Action::make('viewSite')
-                        ->label('Bekijk website')
+                        ->label(fn() => __('cms::navigation.user_menu.view_site'))
                         ->url(config('app.url'))
                         ->icon(Heroicon::GlobeAlt)
                         ->openUrlInNewTab(),
 
                     // Manage password/MFA at Microsoft, only for users that logged in with Microsoft
                     Action::make('manageMicrosoftAccount')
-                        ->label('Microsoft-account beheren')
+                        ->label(fn() => __('cms::navigation.user_menu.manage_microsoft_account'))
                         ->url('https://myaccount.microsoft.com')
                         ->icon('cms-microsoft')
                         ->openUrlInNewTab()
@@ -161,7 +163,14 @@ class CmsPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        LanguageSwitch::configureUsing(function (LanguageSwitch $switch) {
+            $locales = ['nl', 'en'];
+
+            $switch->locales($locales)
+                ->flags(collect($locales)->mapWithKeys(fn (string $locale) => [
+                    $locale => asset("vendor/cms/flags/{$locale}.svg"),
+                ])->all());
+        });
     }
 
     public static function make(): static

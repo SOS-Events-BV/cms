@@ -102,13 +102,13 @@ class EditPage extends EditRecord
     protected function getSaveFormAction(): Action
     {
         return Action::make('save')
-            ->label('Wijzigingen opslaan')
+            ->label(__('cms::pages.slug_modal.save'))
             ->requiresConfirmation()
             ->modalHidden(fn() => $this->originalSlug === ($this->data['slug'] ?? ''))
-            ->modalHeading('Slug wijzigen')
-            ->modalDescription(fn() => "De slug wordt gewijzigd van \"{$this->originalSlug}\" naar \"{$this->data['slug']}\". Hierdoor zullen bestaande links naar deze pagina breken. Je kan dit opvangen door een redirect aan te maken via het tabje Redirects. Weet je zeker dat je door wil gaan?")
-            ->modalSubmitActionLabel('Ja, wijzig slug')
-            ->modalCancelActionLabel('Annuleren')->action(function () {
+            ->modalHeading(__('cms::pages.slug_modal.heading'))
+            ->modalDescription(fn() => __('cms::pages.slug_modal.description', ['old' => $this->originalSlug, 'new' => $this->data['slug']]))
+            ->modalSubmitActionLabel(__('cms::pages.slug_modal.submit'))
+            ->modalCancelActionLabel(__('cms::pages.slug_modal.cancel'))->action(function () {
                 $slugChanged = $this->originalSlug !== ($this->data['slug'] ?? '');
 
                 // Update tracked slug, so re-saving without changes won't trigger the modal again
@@ -119,12 +119,12 @@ class EditPage extends EditRecord
                 if ($slugChanged) {
                     Notification::make()
                         ->warning()
-                        ->title('Slug gewijzigd')
-                        ->body('Vergeet niet een redirect in te stellen om bestaande links op te vangen.')
+                        ->title(__('cms::pages.slug_modal.notification.title'))
+                        ->body(__('cms::redirects.reminder.body'))
                         ->persistent()
                         ->actions([
                             Action::make('createRedirect')
-                                ->label('Redirect aanmaken')
+                                ->label(__('cms::redirects.reminder.button'))
                                 ->button()
                                 ->url(route('filament.admin.resources.redirects.index'))
                         ])

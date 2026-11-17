@@ -2,6 +2,8 @@
 
 namespace SOSEventsBV\Cms\Resources\FaqPageQuestions;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
+use Override;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -27,12 +29,25 @@ class FaqPageQuestionResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'question';
 
-    // Translate labels to Dutch
-    protected static ?string $modelLabel = 'Vraag';
-    protected static ?string $pluralModelLabel = 'Vragen';
-    protected static ?string $navigationLabel = 'FAQ Pagina';
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Pages;
 
-    protected static string|\UnitEnum|null $navigationGroup = "Pagina's";
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::faq.question');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::faq.questions');
+    }
+
+    #[Override]
+    public static function getNavigationLabel(): string
+    {
+        return __('cms::faq.navigation_label');
+    }
 
     public static function form(Schema $schema): Schema
     {
@@ -40,23 +55,23 @@ class FaqPageQuestionResource extends Resource
             ->components([
                 // Select, create, edit and delete FAQ categories
                 Select::make('faq_page_category_id')
-                    ->label('Categorie')
+                    ->label(__('cms::faq.category'))
                     ->relationship('category', 'name')
                     ->createOptionForm([
                         // Create a form for a category
                         TextInput::make('name')
-                            ->label('Categorienaam')
+                            ->label(__('cms::faq.category_name'))
                             ->required(),
                         RichEditor::make('description')
-                            ->label('Categorieomschrijving (optioneel)')
+                            ->label(__('cms::faq.category_description'))
                     ])
                     ->editOptionForm([
                         // Edit form for category
                         TextInput::make('name')
-                            ->label('Categorienaam')
+                            ->label(__('cms::faq.category_name'))
                             ->required(),
                         RichEditor::make('description')
-                            ->label('Categorieomschrijving (optioneel)')
+                            ->label(__('cms::faq.category_description'))
                     ])
                     ->searchable()
                     ->preload()
@@ -64,12 +79,12 @@ class FaqPageQuestionResource extends Resource
                     ->columnSpanFull(),
 
                 TextInput::make('question')
-                    ->label('Vraag')
+                    ->label(__('cms::faq.question'))
                     ->required()
                     ->columnSpanFull(),
 
                 RichEditor::make('answer')
-                    ->label('Antwoord')
+                    ->label(__('cms::faq.answer'))
                     ->required()
                     ->columnSpanFull(),
             ]);
@@ -81,20 +96,20 @@ class FaqPageQuestionResource extends Resource
             ->recordTitleAttribute('question')
             ->columns([
                 TextColumn::make('category.name')
-                    ->label('Categorie'),
+                    ->label(__('cms::faq.category')),
 
                 TextColumn::make('question')
-                    ->label('Vraag')
+                    ->label(__('cms::faq.question'))
                     ->searchable(),
 
                 TextColumn::make('answer')
-                    ->label('Antwoord')
+                    ->label(__('cms::faq.answer'))
                     ->formatStateUsing(fn($state): string => strip_tags($state))
                     ->limit(75)
             ])
             ->filters([
                 SelectFilter::make('faq_page_category_id')
-                    ->label('Categorie')
+                    ->label(__('cms::faq.category'))
                     ->relationship('category', 'name')
                     ->searchable()
                     ->preload(),

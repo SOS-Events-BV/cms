@@ -16,7 +16,7 @@ class ManageFaqPageQuestions extends ManageRecords
     {
         return [
             Action::make('showFAQPage')
-                ->label('Toon FAQ pagina')
+                ->label(__('cms::faq.show_faq_page'))
                 ->icon(Heroicon::QuestionMarkCircle)
                 ->url(config('cms.routes.faq') ? route(config('cms.routes.faq')) : null)
                 ->hidden(!config('cms.routes.faq'))

@@ -18,26 +18,27 @@ class ReviewsTable
         return $table
             ->columns([
                 TextColumn::make('full_name')
-                    ->label('Volledige naam')
+                    ->label(__('cms::reviews.full_name'))
                     ->searchable(['firstname', 'lastname']),
 
                 TextColumn::make('stars')
-                    ->label('Aantal sterren')
+                    ->label(__('cms::reviews.stars'))
                     ->sortable(),
 
                 TextColumn::make('review')
+                    ->label(__('cms::reviews.review'))
                     ->limit(30),
 
                 IconColumn::make('reaction')
-                    ->label('Heeft reactie')
+                    ->label(__('cms::reviews.has_reaction'))
                     ->boolean()
                     ->state(fn($record): bool => !empty($record->reaction)),
 
                 ToggleColumn::make('is_visible')
-                    ->label('Is zichtbaar'),
+                    ->label(__('cms::reviews.is_visible')),
 
                 TextColumn::make('review_placed')
-                    ->label('Review geplaatst')
+                    ->label(__('cms::reviews.review_placed'))
                     ->sortable()
                     ->dateTime(),
             ])

@@ -23,22 +23,22 @@ class SeoSettings
     {
         return Group::make([
             TextInput::make('page_title')
-                ->label('Pagina titel')
+                ->label(__('cms::seo.page_title'))
                 ->required()
                 ->debounce()
-                ->hint(fn($state) => strlen($state) . ' tekens')
+                ->hint(fn($state) => __('cms::seo.characters', ['count' => strlen($state)]))
                 ->hintColor(fn($state) => match (true) {
                     strlen($state) > 60 => 'danger',
                     strlen($state) > 50 => 'warning',
                     default => 'success'
                 })
-                ->belowContent('Een goede pagina titel is tot 50/60 tekens'),
+                ->helperText(__('cms::seo.helpers.page_title')),
 
             Textarea::make('page_description')
-                ->label('Meta description')
+                ->label(__('cms::seo.page_description'))
                 ->required()
                 ->debounce()
-                ->hint(fn($state) => strlen($state) . ' tekens')
+                ->hint(fn($state) => __('cms::seo.characters', ['count' => strlen($state)]))
                 ->hintColor(fn($state) => match (true) {
                     strlen($state) > 160 => 'danger',
                     strlen($state) > 150 => 'warning',
@@ -46,24 +46,24 @@ class SeoSettings
                 })
                 ->autosize()
                 ->maxLength(255)
-                ->belowContent('Een goede meta description is tot 150/160 tekens'),
+                ->belowContent(__('cms::seo.helpers.page_description')),
 
             TagsInput::make('page_keywords')
-                ->label('Meta keywords (optioneel)')
+                ->label(__('cms::seo.page_keywords'))
                 ->separator(', ')
-                ->helperText('Google gebruikt keywords niet meer, maar ze zijn soms nog steeds relevant voor andere zoekmachines.')
-                ->placeholder('Voeg een keyword toe...'),
+                ->helperText(__('cms::seo.helpers.page_keywords'))
+                ->placeholder(__('cms::seo.page_keywords_placeholder')),
 
             // Open Graph settings
-            Section::make('Open Graph (og:)')
-                ->description('Optionele social media preview instellingen')
+            Section::make(__('cms::seo.og.title'))
+                ->description(__('cms::seo.og.description'))
                 ->collapsed()
                 ->schema([
                     // OG Title
                     TextInput::make('og_title')
-                        ->label('OG Titel')
+                        ->label(__('cms::seo.og.og_title'))
                         ->debounce()
-                        ->hint(fn($state) => strlen($state) . ' tekens')
+                        ->hint(fn($state) => __('cms::seo.characters', ['count' => strlen($state)]))
                         ->hintColor(fn($state) => match (true) {
                             strlen($state) > 60 => 'danger',
                             strlen($state) > 50 => 'warning',
@@ -76,13 +76,13 @@ class SeoSettings
                                 default => 'border-green-500',
                             }
                         ])
-                        ->belowContent('Laat leeg om de pagina titel te gebruiken'),
+                        ->belowContent(__('cms::seo.helpers.og_title')),
 
                     // OG Description
                     TextInput::make('og_description')
-                        ->label('OG Omschrijving')
+                        ->label(__('cms::seo.og.og_description'))
                         ->debounce()
-                        ->hint(fn($state) => strlen($state) . ' tekens')
+                        ->hint(fn($state) => __('cms::seo.characters', ['count' => strlen($state)]))
                         ->hintColor(fn($state) => match (true) {
                             strlen($state) > 160 => 'danger',
                             strlen($state) > 150 => 'warning',
@@ -95,22 +95,22 @@ class SeoSettings
                                 default => 'border-green-500',
                             }
                         ])
-                        ->belowContent('Laat leeg om de meta description te gebruiken'),
+                        ->belowContent(__('cms::seo.helpers.og_description')),
 
                     // OG Image
                     FileUpload::make('og_image')
-                        ->label('OG Afbeelding')
+                        ->label(__('cms::seo.og.og_image'))
                         ->image()
                         ->imageEditor()
                         ->disk('public')
                         ->directory($ogDirectory)
                         ->getUploadedFileNameForStorageUsing(
-                        // UUID-based, unique file name with original title + hash and extension
+                            // UUID-based, unique file name with original title + hash and extension
                             fn(TemporaryUploadedFile $file): string => Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
                                 . '_' . Str::uuid()
                                 . '.' . $file->getClientOriginalExtension()
                         )
-                        ->helperText('Aanbevolen formaat: 1200x630px'),
+                        ->helperText(__('cms::seo.helpers.og_image')),
                 ]),
         ])->relationship('seo');
     }

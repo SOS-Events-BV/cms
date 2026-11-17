@@ -16,7 +16,7 @@ class TwoColumnBlock
     public static function make(string $directory = 'page'): Block
     {
         return Block::make('two-column-block')
-            ->label('Twee kolommen')
+            ->label(__('cms::blocks.two-column-block.label'))
             ->icon(Heroicon::ViewColumns)
             ->columns(2)
             ->schema([
@@ -24,44 +24,44 @@ class TwoColumnBlock
                     ->columns(3)
                     ->schema([
                         Select::make('layout_ratio')
-                            ->label('Layout ratio')
-                            ->helperText('Bepaalt de verhouding tussen de linker- en rechterkolom op grotere schermen.')
+                            ->label(__('cms::blocks.two-column-block.layout_ratio'))
+                            ->helperText(__('cms::blocks.two-column-block.helpers.layout_ratio'))
                             ->options([
-                                '50_50' => '50 / 50 (Helft / Helft)',
-                                '33_66' => '33 / 66 (Eén derde / Twee derde)',
-                                '66_33' => '66 / 33 (Twee derde / Eén derde)',
-                                '25_75' => '25 / 75 (Kwart / Driekwart)',
-                                '75_25' => '75 / 25 (Driekwart / Kwart)',
+                                '50_50' => __('cms::blocks.two-column-block.ratios.50_50'),
+                                '33_66' => __('cms::blocks.two-column-block.ratios.33_66'),
+                                '66_33' => __('cms::blocks.two-column-block.ratios.66_33'),
+                                '25_75' => __('cms::blocks.two-column-block.ratios.25_75'),
+                                '75_25' => __('cms::blocks.two-column-block.ratios.75_25'),
                             ])
                             ->default('50_50'),
 
                         ColorPicker::make('background_color')
-                            ->label('Achtergrondkleur')
-                            ->helperText('Kies een achtergrondkleur voor de twee kolommen. (optioneel)')
+                            ->label(__('cms::blocks.two-column-block.background_color'))
+                            ->helperText(__('cms::blocks.two-column-block.helpers.background_color'))
                             ->nullable(),
 
                         ColorPicker::make('text_color')
-                            ->label('Tekstkleur')
-                            ->helperText('Kies een tekstkleur voor de twee kolommen. (optioneel)')
+                            ->label(__('cms::blocks.two-column-block.text_color'))
+                            ->helperText(__('cms::blocks.two-column-block.helpers.text_color'))
                             ->nullable(),
 
                         Toggle::make('center_content')
                             ->inline(false)
                             ->default(false)
-                            ->label('Centreren inhoud')
-                            ->helperText('Hiermee kan je de inhoud centreren in de linker- en rechterkolom.'),
+                            ->label(__('cms::blocks.two-column-block.center_content'))
+                            ->helperText(__('cms::blocks.two-column-block.helpers.center_content')),
                     ])->columnSpanFull(),
 
 
                 Builder::make('left_column')
-                    ->label('Linker kolom')
+                    ->label(__('cms::blocks.two-column-block.left_column'))
                     ->blocks(ContentBuilder::columnBlocks($directory))
                     ->blockIcons()
                     ->blockPickerColumns(2)
                     ->reorderableWithButtons(),
 
                 Builder::make('right_column')
-                    ->label('Rechter kolom')
+                    ->label(__('cms::blocks.two-column-block.right_column'))
                     ->blocks(ContentBuilder::columnBlocks($directory))
                     ->blockIcons()
                     ->blockPickerColumns(2)

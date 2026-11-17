@@ -2,6 +2,8 @@
 
 namespace SOSEventsBV\Cms\Resources\Reviews;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
+use Override;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -32,7 +34,19 @@ class ReviewResource extends Resource
         return ['firstname', 'lastname'];
     }
 
-    protected static string|\UnitEnum|null $navigationGroup = "Pagina's";
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Pages;
+
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::reviews.review');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::reviews.reviews');
+    }
 
     public static function canCreate(): bool
     {

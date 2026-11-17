@@ -31,9 +31,11 @@ class CmsServiceProvider extends PackageServiceProvider
         $package->name(static::$name)
             ->hasCommands($this->getCommands())
             ->discoversMigrations()
+            ->hasAssets()
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
                     ->publishConfigFile()
+                    ->publishAssets()
                     ->publishMigrations()
                     ->askToRunMigrations()
                     ->endWith(function (InstallCommand $command) {
@@ -45,6 +47,10 @@ class CmsServiceProvider extends PackageServiceProvider
 
         if (file_exists($package->basePath("/../config/{$configFileName}.php"))) {
             $package->hasConfigFile();
+        }
+
+        if (file_exists($package->basePath('/../resources/lang'))) {
+            $package->hasTranslations();
         }
 
         if (file_exists($package->basePath('/../resources/views'))) {

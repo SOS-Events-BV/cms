@@ -11,10 +11,10 @@ class SpacerBlock
     public static function make(): Block
     {
         return Block::make('spacer-block')
-            ->label('Witruimte')
+            ->label(__('cms::blocks.spacer-block.label'))
             ->icon(Heroicon::ArrowsUpDown)
             ->schema([
-                TextInput::make('px')->numeric()->suffix('px')->label('Hoogte'),
+                TextInput::make('px')->numeric()->suffix('px')->label(__('cms::blocks.spacer-block.height')),
             ]);
     }
 }

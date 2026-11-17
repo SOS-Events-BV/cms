@@ -2,6 +2,8 @@
 
 namespace SOSEventsBV\Cms\Resources\Events;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
+use Override;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
@@ -22,12 +24,19 @@ class EventResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    // Translate labels to Dutch
-    protected static ?string $modelLabel = 'Evenement';
-    protected static ?string $pluralModelLabel = 'Evenementen';
-    protected static ?string $navigationLabel = 'Evenementen';
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Pages;
 
-    protected static string|\UnitEnum|null $navigationGroup = "Pagina's";
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::events.event');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::events.events');
+    }
 
     public static function form(Schema $schema): Schema
     {

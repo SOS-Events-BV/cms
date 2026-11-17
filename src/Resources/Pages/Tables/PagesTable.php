@@ -22,11 +22,11 @@ class PagesTable
         return $table
             ->columns([
                 TextColumn::make('seo.page_title')
-                    ->label('Titel')
+                    ->label(__('cms::common.title'))
                     ->searchable(),
 
                 TextColumn::make('slug')
-                    ->label('Pagina')
+                    ->label(__('cms::pages.slug'))
                     ->searchable()
                     ->url(fn($record) => config('cms.routes.page') && $record->is_active ? route(config('cms.routes.page'), $record->slug) : null)
                     ->icon(config('cms.routes.page') ? Heroicon::Link : null)
@@ -34,13 +34,13 @@ class PagesTable
                     ->openUrlInNewTab(),
 
                 ToggleColumn::make('is_active')
-                    ->label('Actief'),
+                    ->label(__('cms::common.active')),
 
-                TextColumn::make('created_at')->dateTime()->label('Aangemaakt op')->sortable(),
+                TextColumn::make('created_at')->dateTime()->label(__('cms::common.created_at'))->sortable(),
             ])
             ->filters([
                 // Filter for only active pages
-                Filter::make('is_active')->label('Enkel actieve pagina\'s')->query(function (Builder $query) {
+                Filter::make('is_active')->label(__('cms::pages.filters.only_active_pages'))->query(function (Builder $query) {
                     return $query->where('is_active', true);
                 })->toggle()
             ])
@@ -49,17 +49,17 @@ class PagesTable
 
                 // Add a DeleteAction with a custom modal heading and description
                 DeleteAction::make()
-                    ->modalHeading('Pagina verwijderen')
-                    ->modalDescription('Weet je zeker dat je deze pagina permanent wilt verwijderen? De slug van deze pagina wordt vrijgegeven. Als je bestaande links wilt opvangen, stel dan eerst een redirect in via het kopje Redirects.')
+                    ->modalHeading(__('cms::pages.delete_modal.heading'))
+                    ->modalDescription(__('cms::pages.delete_modal.description'))
                     ->successNotification(
                         Notification::make()
                             ->warning()
-                            ->title('Pagina verwijderd')
-                            ->body('Vergeet niet een redirect in te stellen om bestaande links op te vangen.')
+                            ->title(__('cms::pages.delete_modal.notification.title'))
+                            ->body(__('cms::redirects.reminder.body'))
                             ->persistent()
                             ->actions([
                                 Action::make('createRedirect')
-                                    ->label('Redirect aanmaken')
+                                    ->label(__('cms::redirects.reminder.button'))
                                     ->button()
                                     ->url(route('filament.admin.resources.redirects.index'))
                             ])

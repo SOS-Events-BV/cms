@@ -17,30 +17,30 @@ class ReviewForm
     {
         return $schema
             ->components([
-                Section::make('Review Info')
-                    ->description('Informatie van de review, zoals aantal sterren, wanneer het geplaatst is en of het zichtbaar moet zijn.')
+                Section::make(__('cms::reviews.info.heading'))
+                    ->description(__('cms::reviews.info.description'))
                     ->columnSpanFull()
                     ->aside()
                     ->columns(2)
                     ->schema([
                         // When the user placed the review
                         TextEntry::make('review_placed')
-                            ->label('Review geplaatst')
+                            ->label(__('cms::reviews.review_placed'))
                             ->icon(Heroicon::Clock)
                             ->dateTime(),
 
                         // When the review was placed on the website
                         TextEntry::make('created_at')
-                            ->label('Toegevoegd op site')
+                            ->label(__('cms::reviews.created_at'))
                             ->icon(Heroicon::Plus)
                             ->dateTime(),
 
                         TextEntry::make('stars')
-                            ->label('Aantal sterren')
+                            ->label(__('cms::reviews.stars'))
                             ->icon(Heroicon::Star),
 
                         Toggle::make('is_visible')
-                            ->label('Is zichtbaar')
+                            ->label(__('cms::reviews.is_visible'))
                             ->inline(false),
 
                         // Link to LeisureKing reservation
@@ -49,17 +49,17 @@ class ReviewForm
                             ->color('primary')
                             ->url(fn($record) => "https://oms.leisureking.eu/reservering?h={$record->reservation_hash}") // URL that will be opened
                             ->openUrlInNewTab()
-                            ->label('LeisureKing reservatie hash'),
+                            ->label(__('cms::reviews.reservation_hash')),
 
                         // Extra attributes field in the table
                         KeyValueEntry::make('extra_attributes')
-                            ->label('Extra attributen'),
+                            ->label(__('cms::reviews.extra_attributes')),
                     ]),
 
-                TextInput::make('firstname')->label('Voornaam'),
-                TextInput::make('lastname')->label('Achternaam'),
-                Textarea::make('review')->autosize()->label('Review'),
-                Textarea::make('reaction')->autosize()->label('Reactie'),
+                TextInput::make('firstname')->label(__('cms::reviews.firstname')),
+                TextInput::make('lastname')->label(__('cms::reviews.lastname')),
+                Textarea::make('review')->autosize()->label(__('cms::reviews.review')),
+                Textarea::make('reaction')->autosize()->label(__('cms::reviews.reaction')),
             ]);
     }
 }

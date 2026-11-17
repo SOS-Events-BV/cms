@@ -17,21 +17,21 @@ class EventsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Naam')
+                    ->label(__('cms::common.name'))
                     ->searchable(),
 
                 TextColumn::make('start_date')
-                    ->label('Start datum')
+                    ->label(__('cms::events.start_date'))
                     ->dateTime()
                     ->sortable(),
 
                 TextColumn::make('end_date')
-                    ->label('Eind datum')
+                    ->label(__('cms::events.end_date'))
                     ->dateTime()
                     ->sortable(),
 
                 ToggleColumn::make('is_active')
-                    ->label('Actief'),
+                    ->label(__('cms::common.active')),
             ])
             ->filters([
                 //
