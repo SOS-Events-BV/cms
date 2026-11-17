@@ -22,10 +22,10 @@ class ReviewStats extends StatsOverviewWidget
             ->first();
 
         return [
-            Stat::make('Aantal recensies', number_format((int) $stats->total, 0, ',', '.'))
+            Stat::make(__('cms::reviews.widget.total'), number_format((int) $stats->total, 0, ',', '.'))
                 ->icon(Heroicon::ChatBubbleLeftEllipsis),
 
-            Stat::make('Gemiddeld aantal sterren', number_format((float) $stats->average, 1, ',', '.'))
+            Stat::make(__('cms::reviews.widget.average'), number_format((float) $stats->average, 1, ',', '.'))
                 ->icon(Heroicon::Star),
         ];
     }

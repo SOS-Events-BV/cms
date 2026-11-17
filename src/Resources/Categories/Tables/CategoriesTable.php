@@ -20,11 +20,11 @@ class CategoriesTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Naam')
+                    ->label(__('cms::common.name'))
                     ->searchable(),
 
                 TextColumn::make('slug')
-                    ->label('Pagina')
+                    ->label(__('cms::common.slug'))
                     ->url(
                         fn($record) => config('cms.routes.category') && $record->is_active ?
                             route(config('cms.routes.category'), $record->slug) :
@@ -35,12 +35,12 @@ class CategoriesTable
                     ->openUrlInNewTab(),
 
                 ToggleColumn::make('is_active')
-                    ->label('Actief')
+                    ->label(__('cms::common.active'))
                     ->inline(false),
             ])
             ->filters([
                 // Filter for only active categories
-                Filter::make('is_active')->label('Enkel actieve categorieën')->query(function (Builder $query) {
+                Filter::make('is_active')->label(__('cms::categories.filters.is_active'))->query(function (Builder $query) {
                     return $query->where('is_active', true);
                 })->toggle()
             ])

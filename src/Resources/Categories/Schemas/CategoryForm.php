@@ -25,8 +25,8 @@ class CategoryForm
     {
         return $schema
             ->components([
-                Section::make('SEO Instellingen')
-                    ->description('Beheer de SEO instellingen voor deze categorie.')
+                Section::make(__('cms::seo.title'))
+                    ->description(__('cms::seo.description'))
                     ->aside()
                     ->schema([
                         SeoSettings::make('category/og'),
@@ -34,16 +34,16 @@ class CategoryForm
                         Grid::make(2)->schema([
                             TextEntry::make('url')
                                 ->hiddenOn('create')
-                                ->label('Bekijk categoriepagina')
-                                ->state('Klik hier')
-                                ->url(fn (Get $get, $record) => $get('is_active') && config('cms.routes.category') ? route(config('cms.routes.category'), $record->slug) : null)
+                                ->label(__('cms::common.view'))
+                                ->state(__('cms::common.click_here'))
+                                ->url(fn(Get $get, $record) => $get('is_active') && config('cms.routes.category') ? route(config('cms.routes.category'), $record->slug) : null)
                                 ->icon(Heroicon::Link)
-                                ->color(fn (Get $get) => $get('is_active') ? 'primary' : 'gray')
+                                ->color(fn(Get $get) => $get('is_active') ? 'primary' : 'gray')
                                 ->openUrlInNewTab(),
 
                             // Toggle for active status
                             Toggle::make('is_active')
-                                ->label('Pagina actief')
+                                ->label(__('cms::common.active'))
                                 ->inline(false)
                                 ->default(true)
                                 ->live(),
@@ -52,70 +52,70 @@ class CategoryForm
                         // Created by and updated by with timestamps
                         Grid::make(2)->hiddenOn('create')->schema([
                             TextEntry::make('created_at')
-                                ->label('Aangemaakt op')
+                                ->label(__('cms::common.created_at'))
                                 ->dateTime('d-m-Y H:i')
                                 ->color('gray'),
 
                             TextEntry::make('updated_at')
-                                ->label('Gewijzigd op')
+                                ->label(__('cms::common.updated_at'))
                                 ->dateTime('d-m-Y H:i')
                                 ->color('gray'),
                         ]),
                     ])->columnSpanFull(),
 
                 TextInput::make('name')
-                    ->label('Naam')
+                    ->label(__('cms::common.name'))
                     ->required(),
 
                 TextInput::make('slug')
-                    ->label('Slug')
+                    ->label(__('cms::common.slug'))
                     ->required(),
 
                 RichEditor::make('description')
-                    ->label('Beschrijving')
+                    ->label(__('cms::common.description'))
                     ->required()
                     ->columnSpanFull(),
 
                 Select::make('products')
-                    ->label('Producten')
-                    ->helperText('Selecteer de producten die bij deze categorie horen')
+                    ->label(__('cms::categories.products'))
+                    ->helperText(__('cms::categories.helpers.products'))
                     ->relationship('products', 'name')
                     ->multiple()
                     ->preload(),
 
                 Repeater::make('example_time_schemes')
-                    ->label('Voorbeeld Tijdschema\'s')
+                    ->label(__('cms::categories.example_time_schemes'))
                     ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                     ->schema([
                         TextInput::make('name')
-                            ->label('Naam programma')
-                            ->placeholder('bijv. Ochtendprogramma')
+                            ->label(__('cms::common.time_schemes.name'))
+                            ->placeholder(__('cms::common.time_schemes.name_placeholder'))
                             ->required(),
 
                         Repeater::make('rows')
-                            ->label('Onderdelen')
+                            ->label(__('cms::common.time_schemes.rows'))
                             ->grid(2)
                             ->schema([
                                 Grid::make(2)->schema([
                                     TimePicker::make('start_time')
-                                        ->label('Van')
+                                        ->label(__('cms::common.time_schemes.start_time'))
                                         ->required(),
                                     TimePicker::make('end_time')
-                                        ->label('Tot')
+                                        ->label(__('cms::common.time_schemes.end_time'))
                                         ->required(),
                                 ]),
                                 TextInput::make('activity')
-                                    ->label('Activiteit')
-                                    ->placeholder('Ontvangst met koffie')
+                                    ->label(__('cms::common.time_schemes.activity'))
+                                    ->placeholder(__('cms::common.time_schemes.activity_placeholder'))
                                     ->required(),
                             ])
-                            ->addActionLabel('Onderdeel toevoegen'),
+                            ->addActionLabel(__('cms::common.time_schemes.add_row')),
                     ])
                     ->columnSpanFull()
-                    ->addActionLabel('Nieuw tijdschema toevoegen'),
+                    ->addActionLabel(__('cms::common.time_schemes.add_label')),
 
                 SpatieMediaLibraryFileUpload::make('images')
-                    ->label('Afbeeldingen')
+                    ->label(__('cms::categories.images'))
                     ->collection('category')
                     ->disk('public')
                     ->multiple()
@@ -125,7 +125,7 @@ class CategoryForm
                     ->appendFiles()
                     ->panelLayout('grid')
                     ->getUploadedFileNameForStorageUsing(
-                    // UUID-based, unique file name with original title + hash and extension
+                        // UUID-based, unique file name with original title + hash and extension
                         fn(TemporaryUploadedFile $file): string => Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
                             . '_' . Str::uuid()
                             . '.' . $file->getClientOriginalExtension()

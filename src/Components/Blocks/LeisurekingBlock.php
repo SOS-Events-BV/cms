@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class LeisurekingFrame extends Component
+class LeisurekingBlock extends Component
 {
     public string $bookingmodule_code;
     public string $url;
@@ -34,6 +34,6 @@ class LeisurekingFrame extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('cms::components.blocks.leisureking-frame');
+        return view('cms::components.blocks.leisureking-block');
     }
 }

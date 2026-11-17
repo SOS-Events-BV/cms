@@ -17,7 +17,7 @@ class ListEvents extends ListRecords
         return [
             // Button to events page
             Action::make('showEventsPage')
-                ->label('Toon evenementen pagina')
+                ->label(__('cms::events.show_events_page'))
                 ->icon(Heroicon::Users)
                 ->url(config('cms.routes.events') ? route(config('cms.routes.events')) : null)
                 ->hidden(!config('cms.routes.events'))

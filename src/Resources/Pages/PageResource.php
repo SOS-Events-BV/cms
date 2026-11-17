@@ -2,12 +2,14 @@
 
 namespace SOSEventsBV\Cms\Resources\Pages;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
+use Override;
 use SOSEventsBV\Cms\Models\Page;
 use SOSEventsBV\Cms\Resources\Pages\Pages\CreatePage;
 use SOSEventsBV\Cms\Resources\Pages\Pages\EditPage;
@@ -21,19 +23,26 @@ class PageResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedDocumentText;
 
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Pages;
+
     protected static ?string $recordTitleAttribute = 'seo.page_title';
+
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::pages.page');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::pages.pages');
+    }
 
     public static function getGlobalSearchResultTitle(Model $record): string
     {
         return $record->seo->page_title;
     }
-
-    protected static string|\UnitEnum|null $navigationGroup = "Pagina's";
-
-    // Translate labels to Dutch
-    protected static ?string $modelLabel = 'Pagina';
-    protected static ?string $pluralModelLabel = 'Pagina\'s';
-    protected static ?string $navigationLabel = 'Pagina\'s';
 
     public static function form(Schema $schema): Schema
     {

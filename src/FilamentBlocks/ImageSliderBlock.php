@@ -24,14 +24,14 @@ class ImageSliderBlock
     public static function make(string $directory = 'page/slider'): Block
     {
         return Block::make('image-slider-block')
-            ->label('Afbeelding slider')
+            ->label(__('cms::blocks.image-slider-block.label'))
             ->icon(Heroicon::Photo)
             ->schema([
                 Repeater::make('images')
-                    ->label('Afbeeldingen')
+                    ->label(__('cms::blocks.image-slider-block.images'))
                     ->schema([
                         FileUpload::make('url')
-                            ->label('Afbeelding')
+                            ->label(__('cms::blocks.image-slider-block.image'))
                             ->disk('public')
                             ->directory($directory . '/slider')
                             ->image()
@@ -45,58 +45,58 @@ class ImageSliderBlock
                             ->required(),
 
                         TextInput::make('alt')
-                            ->label('Alt'),
+                            ->label(__('cms::blocks.image-slider-block.alt')),
                     ])
                     ->grid(2)
-                    ->addActionLabel('Toevoegen aan slider'),
+                    ->addActionLabel(__('cms::blocks.image-slider-block.add_label')),
 
-                Section::make('Instellingen')
+                Section::make(__('cms::blocks.image-slider-block.settings'))
                     ->collapsed()
                     ->schema([
                         Grid::make(4)
                             ->schema([
                                 Toggle::make('loop')
-                                    ->label('Loop')
+                                    ->label(__('cms::blocks.image-slider-block.loop'))
                                     ->default(false),
 
                                 Toggle::make('navigation')
-                                    ->label('Navigatie pijlen')
+                                    ->label(__('cms::blocks.image-slider-block.navigation'))
                                     ->default(false),
 
                                 Toggle::make('pagination')
-                                    ->label('Pagination')
+                                    ->label(__('cms::blocks.image-slider-block.pagination'))
                                     ->default(false),
 
                                 Toggle::make('autoplay')
-                                    ->label('Autoplay')
+                                    ->label(__('cms::blocks.image-slider-block.autoplay'))
                                     ->default(false)
                                     ->live(),
                             ]),
 
                         TextInput::make('autoplay_speed')
-                            ->label('Autoplay snelheid (ms)')
+                            ->label(__('cms::blocks.image-slider-block.autoplay_speed'))
                             ->numeric()
                             ->default(3000)
                             ->minValue(500)
                             ->suffix('ms')
                             ->visible(fn($get) => $get('autoplay')),
 
-                        Section::make('Slides per breakpoint')
+                        Section::make(__('cms::blocks.image-slider-block.slides_per_breakpoint'))
                             ->schema([
                                 Grid::make(3)
                                     ->schema([
                                         TextInput::make('slides_mobile')
-                                            ->label('Mobiel (< 640px)')
+                                            ->label(__('cms::blocks.image-slider-block.slides_mobile'))
                                             ->numeric()
                                             ->default(1)
                                             ->minValue(1),
                                         TextInput::make('slides_tablet')
-                                            ->label('Tablet (640px)')
+                                            ->label(__('cms::blocks.image-slider-block.slides_tablet'))
                                             ->numeric()
                                             ->default(2)
                                             ->minValue(1),
                                         TextInput::make('slides_desktop')
-                                            ->label('Desktop (1024px)')
+                                            ->label(__('cms::blocks.image-slider-block.slides_desktop'))
                                             ->numeric()
                                             ->default(3)
                                             ->minValue(1),
@@ -104,7 +104,7 @@ class ImageSliderBlock
                             ]),
 
                         TextInput::make('space_between')
-                            ->label('Afstand tussen slides (px)')
+                            ->label(__('cms::blocks.image-slider-block.space_between'))
                             ->suffix('px')
                             ->numeric()
                             ->default(20),

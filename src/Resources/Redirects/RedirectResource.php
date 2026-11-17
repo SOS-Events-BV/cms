@@ -1,8 +1,9 @@
 <?php
 
-
 namespace SOSEventsBV\Cms\Resources\Redirects;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
+use Override;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -26,26 +27,39 @@ class RedirectResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::ArrowsRightLeft;
 
-    protected static string|UnitEnum|null $navigationGroup = "Instellingen";
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Settings;
+
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::redirects.redirect');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::redirects.redirects');
+    }
 
     public static function form(Schema $schema): Schema
     {
         return $schema
             ->components([
                 TextInput::make('from')
-                    ->label('Van URL')
+                    ->label(__('cms::redirects.from'))
                     ->required()
                     ->prefix(config('app.url') . '/')
-                    ->placeholder('Bijvoorbeeld oude-pagina of oud/pagina')
-                    ->helperText('Zet geen / aan het begin, mag wel een / bevatten (Bijvoorbeeld: pagina/subpagina).')
+                    ->placeholder(__('cms::redirects.placeholders.from'))
+                    ->helperText(__('cms::redirects.helpers.from'))
                     ->dehydrateStateUsing(fn($state) => ltrim($state, '/')) // Removes slash if the user types it
                     ->unique(ignoreRecord: true)
                     ->columnSpanFull(),
 
                 TextInput::make('to')
+                    ->label(__('cms::redirects.to'))
                     ->required()
-                    ->placeholder('Bijvoorbeeld /nieuwe-pagina of https://google.com')
-                    ->helperText('Gebruik een / voor interne pagina\'s, type https:// voor externe pagina\'s (Bijvoorbeeld https://google.com).')
+                    ->placeholder(__('cms::redirects.placeholders.to'))
+                    ->helperText(__('cms::redirects.helpers.to'))
                     ->dehydrateStateUsing(function ($state) {
                         if (empty($state)) return $state;
 
@@ -60,9 +74,10 @@ class RedirectResource extends Resource
                     ->columnSpanFull(),
 
                 Select::make('status_code')
+                    ->label(__('cms::redirects.status_code'))
                     ->options([
-                        301 => '301 (Permanent)',
-                        302 => '302 (Tijdelijk)',
+                        301 => __('cms::redirects.status_codes.301'),
+                        302 => __('cms::redirects.status_codes.302'),
                     ])
                     ->default(301)
                     ->required()
@@ -75,16 +90,17 @@ class RedirectResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('from')
-                    ->label('Van URL')
+                    ->label(__('cms::redirects.from'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('to')
-                    ->label('Naar URL')
+                    ->label(__('cms::redirects.to'))
                     ->searchable()
                     ->sortable(),
 
                 TextColumn::make('status_code')
+                    ->label(__('cms::redirects.status_code'))
                     ->colors([
                         'success' => 301,
                         'warning' => 302,
@@ -93,10 +109,10 @@ class RedirectResource extends Resource
             ])
             ->filters([
                 SelectFilter::make('status_code')
-                    ->label('Status code')
+                    ->label(__('cms::redirects.status_code'))
                     ->options([
-                        301 => '301 (Permanent)',
-                        302 => '302 (Tijdelijk)',
+                        301 => __('cms::redirects.status_codes.301'),
+                        302 => __('cms::redirects.status_codes.302'),
                     ])
                     ->native(false),
             ])

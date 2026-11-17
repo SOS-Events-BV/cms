@@ -20,11 +20,11 @@ class ImageBlock
     public static function make(string $directory = 'page'): Block
     {
         return Block::make('image-block')
-            ->label('Afbeelding')
+            ->label(__('cms::blocks.image-block.label'))
             ->icon(Heroicon::Photo)
             ->schema([
                 FileUpload::make('url')
-                    ->label('Afbeelding')
+                    ->label(__('cms::blocks.image-block.image'))
                     ->disk('public')
                     ->directory($directory)
                     ->image()
@@ -38,7 +38,7 @@ class ImageBlock
                     ->required(),
 
                 TextInput::make('alt')
-                    ->label('Alt')
+                    ->label(__('cms::blocks.image-block.alt'))
                     ->required(),
             ])->columns(2);
     }

@@ -13,14 +13,14 @@ class ListReviews extends ListRecords
 
     public function getSubheading(): ?string
     {
-        return 'In dit overzicht zie je de volledige namen van reviewers. Ter bescherming van de privacy wordt op de website enkel de voornaam getoond.';
+        return __('cms::reviews.privacy_notice');
     }
 
     protected function getHeaderActions(): array
     {
         return [
             Action::make('showReviewPage')
-                ->label('Toon reviews pagina')
+                ->label(__('cms::reviews.show_reviews_page'))
                 ->icon(Heroicon::Users)
                 ->url(config('cms.routes.reviews') ? route(config('cms.routes.reviews')) : null)
                 ->hidden(!config('cms.routes.reviews'))

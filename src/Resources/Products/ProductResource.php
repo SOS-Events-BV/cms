@@ -2,6 +2,8 @@
 
 namespace SOSEventsBV\Cms\Resources\Products;
 
+use SOSEventsBV\Cms\Enums\NavigationGroup;
+use Override;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -19,12 +21,19 @@ class ProductResource extends Resource
     protected static ?string $model = Product::class;
     protected static string|null|\BackedEnum $navigationIcon = Heroicon::OutlinedShoppingBag;
     protected static ?string $recordTitleAttribute = 'name';
-    protected static string|null|\UnitEnum $navigationGroup = "Producten";
+    protected static string|\UnitEnum|null $navigationGroup = NavigationGroup::Products;
 
-    // Translate labels to Dutch
-    protected static ?string $modelLabel = 'Product';
-    protected static ?string $pluralModelLabel = 'Producten';
-    protected static ?string $navigationLabel = 'Producten';
+    #[Override]
+    public static function getModelLabel(): string
+    {
+        return __('cms::products.product');
+    }
+
+    #[Override]
+    public static function getPluralModelLabel(): string
+    {
+        return __('cms::products.products');
+    }
 
     public static function form(Schema $schema): Schema
     {

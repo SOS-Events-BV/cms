@@ -11,7 +11,7 @@ class ContentBlock
     public static function make(): Block
     {
         return Block::make('content-block')
-            ->label('Content blok')
+            ->label(__('cms::blocks.content-block.label'))
             ->icon(Heroicon::DocumentText)
             ->schema([
                 RichEditor::make('content')

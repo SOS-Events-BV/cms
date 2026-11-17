@@ -16,7 +16,7 @@ class ListProducts extends ListRecords
     {
         return [
             Action::make('showProductsPage')
-                ->label('Toon alle producten pagina')
+                ->label(__('cms::products.show_products_page'))
                 ->icon(Heroicon::ShoppingBag)
                 ->url(config('cms.routes.products') ? route(config('cms.routes.products')) : null)
                 ->hidden(!config('cms.routes.products'))

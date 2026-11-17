@@ -47,6 +47,10 @@ class CmsServiceProvider extends PackageServiceProvider
             $package->hasConfigFile();
         }
 
+        if (file_exists($package->basePath('/../resources/lang'))) {
+            $package->hasTranslations();
+        }
+
         if (file_exists($package->basePath('/../resources/views'))) {
             $package->hasViews(static::$viewNamespace);
         }

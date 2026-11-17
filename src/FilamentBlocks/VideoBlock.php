@@ -13,24 +13,27 @@ class VideoBlock
     public static function make(): Block
     {
         return Block::make('video-block')
-            ->label('Video (YouTube)')
+            ->label(__('cms::blocks.video-block.label'))
             ->icon(Heroicon::VideoCamera)
             ->schema([
                 TextInput::make('video_id')
-                    ->label('Video ID')
-                    ->afterLabel('Dit staat achter /watch?v={id}'),
+                    ->label(__('cms::blocks.video-block.video_id'))
+                    ->afterLabel(__('cms::blocks.video-block.helpers.video_id')),
 
                 Flex::make([
                     Toggle::make('autoplay')
-                        ->helperText('Video start automatisch')
+                        ->label(__('cms::blocks.video-block.autoplay'))
+                        ->helperText(__('cms::blocks.video-block.helpers.autoplay'))
                         ->default(false),
 
                     Toggle::make('controls')
-                        ->helperText('Video kan worden bestuurd met knoppen')
+                        ->label(__('cms::blocks.video-block.controls'))
+                        ->helperText(__('cms::blocks.video-block.helpers.controls'))
                         ->default(true),
 
                     Toggle::make('mute')
-                        ->helperText('Tijdens afspelen geen geluid')
+                        ->label(__('cms::blocks.video-block.mute'))
+                        ->helperText(__('cms::blocks.video-block.helpers.mute'))
                         ->default(false),
                 ])
             ]);

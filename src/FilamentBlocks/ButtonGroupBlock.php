@@ -14,7 +14,7 @@ class ButtonGroupBlock
     public static function make(): Block
     {
         return Block::make('button-group-block')
-            ->label('Knop(pen) / link(s)')
+            ->label(__('cms::blocks.button-group-block.label'))
             ->icon(Heroicon::CursorArrowRays)
             ->schema([
                 Repeater::make('buttons')
@@ -23,15 +23,19 @@ class ButtonGroupBlock
                         // Add different types of buttons here
                         // 3 defaults are added in the template by default. If you have another button here, add this one to this file.
                         Select::make('class')
-                            ->label('Knop type')
+                            ->label(__('cms::blocks.button-group-block.type'))
                             ->options(config('cms.buttons'))->required(),
 
-                        TextInput::make('content')->label('Knop tekst')->required(),
+                        TextInput::make('content')
+                            ->label(__('cms::blocks.button-group-block.content'))
+                            ->required(),
 
-                        TextInput::make('url')->required(),
+                        TextInput::make('url')
+                            ->label(__('cms::blocks.button-group-block.url'))
+                            ->required(),
 
                         Toggle::make('open_in_new_tab')
-                            ->label('Openen in nieuwe tab')
+                            ->label(__('cms::blocks.button-group-block.open_in_new_tab'))
                             ->required()
                             ->inline(false),
                     ])->columns(2)

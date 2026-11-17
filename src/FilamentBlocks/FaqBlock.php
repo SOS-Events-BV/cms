@@ -13,16 +13,21 @@ class FaqBlock
     public static function make(): Block
     {
         return Block::make('faq-block')
-            ->label('FAQ blok')
+            ->label(__('cms::blocks.faq-block.label'))
             ->icon(Heroicon::QuestionMarkCircle)
             ->schema([
                 Repeater::make('faqs')
-                    ->label('FAQ\'s')
-                    ->addActionLabel('FAQ toevoegen')
+                    ->hiddenLabel()
+                    ->addActionLabel(__('cms::blocks.faq-block.add_label'))
                     ->collapsible()
                     ->schema([
-                        TextInput::make('question')->label('Vraag'),
-                        RichEditor::make('answer')->label('Antwoord')
+                        TextInput::make('question')
+                            ->label(__('cms::blocks.faq-block.question'))
+                            ->required(),
+
+                        RichEditor::make('answer')
+                            ->label(__('cms::blocks.faq-block.answer'))
+                            ->required(),
                     ])
             ]);
     }

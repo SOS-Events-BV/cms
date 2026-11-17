@@ -20,19 +20,19 @@ class ProductsTable
         return $table
             ->columns([
                 TextColumn::make('name')
-                    ->label('Productnaam')
+                    ->label(__('cms::products.name'))
                     ->searchable(),
 
                 TextColumn::make('euroPrices.amount')
-                    ->label('Prijs/Prijzen (EUR)')
+                    ->label(__('cms::products.table.prices'))
                     ->money('EUR')
                     ->sortable(),
 
-                IconColumn::make('euroPrices.includes_vat')->boolean()->label('Incl. BTW'),
+                IconColumn::make('euroPrices.includes_vat')->boolean()->label(__('cms::products.table.includes_vat')),
 
-                ToggleColumn::make('is_active')->label('Actief'),
+                ToggleColumn::make('is_active')->label(__('cms::common.active')),
 
-                TextColumn::make('created_at')->label('Aangemaakt op')
+                TextColumn::make('created_at')->label(__('cms::common.created_at'))
                     ->dateTime()
                     ->sortable(),
             ])
@@ -40,7 +40,7 @@ class ProductsTable
             ->reorderable('sort_order')
             ->filters([
                 // Filter for only active products
-                Filter::make('is_active')->label('Enkel actieve producten')->query(function (Builder $query) {
+                Filter::make('is_active')->label(__('cms::products.filters.is_active'))->query(function (Builder $query) {
                     return $query->where('is_active', true);
                 })->toggle()
             ])
