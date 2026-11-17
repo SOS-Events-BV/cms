@@ -24,6 +24,7 @@ use SOSEventsBV\Cms\Resources\Redirects\RedirectResource;
 use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
 use SOSEventsBV\Cms\Widgets\LastEditedPages;
 use SOSEventsBV\Cms\Widgets\ReviewStats;
+use Filament\Support\Enums\Platform;
 
 class CmsPlugin implements Plugin
 {
@@ -149,7 +150,13 @@ class CmsPlugin implements Plugin
                             ->color('#2f2f2f'),
                     ])
                     ->registration(true),
-            ]);
+            ])
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearchFieldSuffix(fn(): ?string => match (Platform::detect()) {
+                Platform::Windows, Platform::Linux => 'CTRL+K',
+                Platform::Mac => '⌘K',
+                default => null,
+            });
     }
 
     public function boot(Panel $panel): void
