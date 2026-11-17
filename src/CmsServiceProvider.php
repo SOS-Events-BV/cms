@@ -2,6 +2,7 @@
 
 namespace SOSEventsBV\Cms;
 
+use BladeUI\Icons\Factory as IconFactory;
 use Illuminate\Support\Facades\Event;
 use Illuminate\View\Compilers\BladeCompiler;
 use SOSEventsBV\Cms\Commands\CreateCustomBlock;
@@ -85,6 +86,14 @@ class CmsServiceProvider extends PackageServiceProvider
             if (config('cms.routing.register_catch_all', true)) {
                 $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
             }
+        });
+
+        // Register the package's SVG icons (e.g. `cms-microsoft`)
+        $this->callAfterResolving(IconFactory::class, function (IconFactory $factory) {
+            $factory->add('cms', [
+                'path' => __DIR__ . '/../resources/svg',
+                'prefix' => 'cms',
+            ]);
         });
 
         // Add components to the website of the user

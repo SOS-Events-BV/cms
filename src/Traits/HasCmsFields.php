@@ -2,6 +2,8 @@
 
 namespace SOSEventsBV\Cms\Traits;
 
+use Filament\Panel;
+
 trait HasCmsFields
 {
     public function initializeHasCmsFields(): void
@@ -15,7 +17,7 @@ trait HasCmsFields
 
     /**
      * Get all roles of the User
-     * 
+     *
      * @return array<string>
      */
     public function getRoles(): array
@@ -31,6 +33,11 @@ trait HasCmsFields
     public function hasRole(string|array $roles): bool
     {
         return array_intersect((array) $roles, $this->getRoles()) !== [];
+    }
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        return $this->getRoles() !== [];
     }
 
     /**
