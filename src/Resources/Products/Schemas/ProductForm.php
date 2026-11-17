@@ -28,13 +28,13 @@ use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use SOSEventsBV\Cms\FilamentComponents\SeoSettings;
 use SOSEventsBV\Cms\Models\Currency;
-use SOSEventsBV\Cms\Services\LeisureKingService;
+use SOSEventsBV\Cms\Api\LeisureKingClient;
 
 class ProductForm
 {
-    public static function lkApi(): LeisureKingService
+    public static function lkApi(): LeisureKingClient
     {
-        return new LeisureKingService();
+        return new LeisureKingClient();
     }
 
     /**
@@ -145,17 +145,19 @@ class ProductForm
     public static function lkSyncAction(string $field): Action
     {
         return Action::make('excluded_fields_lk_sync_' . $field)
-            ->label(fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
-                ? 'LK sync uitgeschakeld'
-                : 'LK sync ingeschakeld'
+            ->label(
+                fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
+                    ? 'LK sync uitgeschakeld'
+                    : 'LK sync ingeschakeld'
             )
             ->tooltip(fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
                 ? 'LK sync uitgeschakeld'
                 : 'LK sync ingeschakeld')
             ->icon(Heroicon::ArrowPath)
-            ->color(fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
-                ? 'gray'
-                : 'success'
+            ->color(
+                fn(Get $get): string => $get("excluded_fields_lk_sync.{$field}")
+                    ? 'gray'
+                    : 'success'
             )
             ->action(fn(Set $set, Get $get) => $set(
                 "excluded_fields_lk_sync.{$field}",
@@ -208,7 +210,7 @@ class ProductForm
                                     ->reorderable()
                                     ->panelLayout('grid')
                                     ->getUploadedFileNameForStorageUsing(
-                                    // UUID-based, unique file name with original title + hash and extension
+                                        // UUID-based, unique file name with original title + hash and extension
                                         fn(TemporaryUploadedFile $file): string => Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
                                             . '_' . Str::uuid()
                                             . '.' . $file->getClientOriginalExtension()
@@ -252,9 +254,10 @@ class ProductForm
                                             ->hiddenOn('create')
                                             ->label('Bekijk product')
                                             ->state('Klik hier')
-                                            ->url(fn($record) => config('cms.routes.product') ?
-                                                route(config('cms.routes.product'), $record->slug) :
-                                                null
+                                            ->url(
+                                                fn($record) => config('cms.routes.product') ?
+                                                    route(config('cms.routes.product'), $record->slug) :
+                                                    null
                                             )
                                             ->hidden(fn(Get $get) => !$get('is_active') || !config('cms.routes.product'))
                                             ->icon(Heroicon::Link)
