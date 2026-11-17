@@ -4,7 +4,9 @@ namespace SOSEventsBV\Cms;
 
 use Cocosmos\FilamentStickySaveBar\Enums\ShowOn;
 use Cocosmos\FilamentStickySaveBar\StickySaveBarPlugin;
+use Composer\InstalledVersions;
 use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser;
 use DutchCodingCompany\FilamentSocialite\Provider;
 use Filament\Actions\Action;
 use Filament\Contracts\Plugin;
@@ -20,6 +22,9 @@ use SOSEventsBV\Cms\Resources\Pages\PageResource;
 use SOSEventsBV\Cms\Resources\Products\ProductResource;
 use SOSEventsBV\Cms\Resources\Redirects\RedirectResource;
 use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
+use SOSEventsBV\Cms\Widgets\LastEditedPages;
+use SOSEventsBV\Cms\Widgets\ReviewStats;
+use Filament\Support\Enums\Platform;
 
 class CmsPlugin implements Plugin
 {
@@ -86,8 +91,6 @@ class CmsPlugin implements Plugin
         }
 
         $panel
-            ->profile()
-            ->passwordReset()
             ->plugins([
                 FilamentPeekPlugin::make(),
             ])
@@ -104,12 +107,36 @@ class CmsPlugin implements Plugin
             ->unsavedChangesAlerts() // Alert when changes are made and you wan't to quit the page
             ->sidebarCollapsibleOnDesktop() // Hide menu on desktop
             ->userMenuItems([
-                // View website button
-                Action::make('viewSite')
-                    ->label('Bekijk website')
-                    ->url(config('app.url'))
-                    ->icon(Heroicon::GlobeAlt)
-                    ->openUrlInNewTab()
+                [
+                    // View website button
+                    Action::make('viewSite')
+                        ->label('Bekijk website')
+                        ->url(config('app.url'))
+                        ->icon(Heroicon::GlobeAlt)
+                        ->openUrlInNewTab(),
+
+                    // Manage password/MFA at Microsoft, only for users that logged in with Microsoft
+                    Action::make('manageMicrosoftAccount')
+                        ->label('Microsoft-account beheren')
+                        ->url('https://myaccount.microsoft.com')
+                        ->icon('cms-microsoft')
+                        ->openUrlInNewTab()
+                        ->visible(fn(): bool => once(fn(): bool => SocialiteUser::query()
+                            ->where('user_id', auth()->id())
+                            ->where('provider', 'microsoft')
+                            ->exists())),
+                ],
+                [
+                    // CMS version, helpful for support questions
+                    Action::make('cmsVersion')
+                        ->label('CMS ' . (InstalledVersions::getPrettyVersion('sos-events-bv/cms') ?? 'onbekend'))
+                        ->icon(Heroicon::InformationCircle)
+                        ->disabled(),
+                ]
+            ])
+            ->widgets([
+                ReviewStats::class,
+                LastEditedPages::class
             ])
             ->plugins([
                 StickySaveBarPlugin::make()
@@ -119,11 +146,17 @@ class CmsPlugin implements Plugin
                     ->providers([
                         Provider::make('microsoft')
                             ->label('Microsoft')
-                            // ->icon('bi-microsoft')
+                            ->icon('cms-microsoft')
                             ->color('#2f2f2f'),
                     ])
                     ->registration(true),
-            ]);
+            ])
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->globalSearchFieldSuffix(fn(): ?string => match (Platform::detect()) {
+                Platform::Windows, Platform::Linux => 'CTRL+K',
+                Platform::Mac => '⌘K',
+                default => null,
+            });
     }
 
     public function boot(Panel $panel): void
