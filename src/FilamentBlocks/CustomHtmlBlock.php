@@ -11,7 +11,7 @@ class CustomHtmlBlock
 {
     public static function make(): Block
     {
-        return Block::make('custom_html_block')
+        return Block::make('custom-html-block')
             ->label('HTML blok')
             ->icon(Heroicon::CodeBracket)
             ->schema([

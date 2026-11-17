@@ -14,7 +14,7 @@ class LeisureKingFrame
 {
     public static function make(): Block
     {
-        return Block::make('leisureking_frame')
+        return Block::make('leisureking-frame')
             ->label('LeisureKing iFrame')
             ->icon(Heroicon::ComputerDesktop)
             ->schema([

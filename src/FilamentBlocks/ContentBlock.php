@@ -10,7 +10,7 @@ class ContentBlock
 {
     public static function make(): Block
     {
-        return Block::make('content_block')
+        return Block::make('content-block')
             ->label('Content blok')
             ->icon(Heroicon::DocumentText)
             ->schema([

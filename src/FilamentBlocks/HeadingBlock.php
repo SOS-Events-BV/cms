@@ -11,7 +11,7 @@ class HeadingBlock
 {
     public static function make(): Block
     {
-        return Block::make('heading_block')
+        return Block::make('heading-block')
             ->label('Heading / titel')
             ->icon(Heroicon::H1)
             ->schema([

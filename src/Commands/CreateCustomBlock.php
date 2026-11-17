@@ -30,7 +30,7 @@ class CreateCustomBlock extends Command
     {
         // Get the block name, if not given, ask
         $blockName = $this->argument('name');
-        if(!$blockName) $blockName = $this->ask('What is the name of the block?');
+        if (!$blockName) $blockName = $this->ask('What is the name of the block?');
 
         // Ask label
         $label = $this->ask('What should the label be of the component?');
@@ -88,7 +88,7 @@ class CreateCustomBlock extends Command
         $replacements = [
             '{{ namespace }}' => 'App\Cms\CustomBlocks',
             '{{ class }}' => $className,
-            '{{ blockKey }}' => Str::snake($className),
+            '{{ blockKey }}' => Str::kebab($className),
             '{{ label }}' => $label,
         ];
 

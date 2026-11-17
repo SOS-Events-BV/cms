@@ -12,7 +12,7 @@ class VideoBlock
 {
     public static function make(): Block
     {
-        return Block::make('video_block')
+        return Block::make('video-block')
             ->label('Video (YouTube)')
             ->icon(Heroicon::VideoCamera)
             ->schema([

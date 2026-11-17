@@ -23,7 +23,7 @@ class ImageSliderBlock
      */
     public static function make(string $directory = 'page/slider'): Block
     {
-        return Block::make('image_slider_block')
+        return Block::make('image-slider-block')
             ->label('Afbeelding slider')
             ->icon(Heroicon::Photo)
             ->schema([
@@ -37,7 +37,7 @@ class ImageSliderBlock
                             ->image()
                             ->imageEditor()
                             ->getUploadedFileNameForStorageUsing(
-                            // UUID-based, unique file name with original title + hash and extension
+                                // UUID-based, unique file name with original title + hash and extension
                                 fn(TemporaryUploadedFile $file): string => Str::slug(pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME))
                                     . '_' . Str::uuid()
                                     . '.' . $file->getClientOriginalExtension()
