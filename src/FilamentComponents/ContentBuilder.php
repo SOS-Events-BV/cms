@@ -13,7 +13,7 @@ use SOSEventsBV\Cms\FilamentBlocks\FormBuilderBlock;
 use SOSEventsBV\Cms\FilamentBlocks\HeadingBlock;
 use SOSEventsBV\Cms\FilamentBlocks\ImageBlock;
 use SOSEventsBV\Cms\FilamentBlocks\ImageSliderBlock;
-use SOSEventsBV\Cms\FilamentBlocks\LeisureKingBlock;
+use SOSEventsBV\Cms\FilamentBlocks\LeisurekingBlock;
 use SOSEventsBV\Cms\FilamentBlocks\ReadMoreBlock;
 use SOSEventsBV\Cms\FilamentBlocks\TwoColumnBlock;
 use SOSEventsBV\Cms\FilamentBlocks\VideoBlock;
@@ -40,7 +40,7 @@ class ContentBuilder
             TwoColumnBlock::make($directory),
             ImageSliderBlock::make($directory),
             FormBuilderBlock::make(),
-            LeisureKingBlock::make(),
+            LeisurekingBlock::make(),
             ReadMoreBlock::make(),
             CustomHtmlBlock::make(),
         ];
@@ -65,7 +65,7 @@ class ContentBuilder
             VideoBlock::make(),
             SpacerBlock::make(),
             ImageSliderBlock::make($directory),
-            LeisureKingBlock::make(),
+            LeisurekingBlock::make(),
             ReadMoreBlock::make(),
             CustomHtmlBlock::make(),
         ];

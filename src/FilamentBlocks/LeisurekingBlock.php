@@ -10,7 +10,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Support\Icons\Heroicon;
 
-class LeisureKingBlock
+class LeisurekingBlock
 {
     public static function make(): Block
     {

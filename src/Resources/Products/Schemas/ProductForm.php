@@ -28,13 +28,13 @@ use Illuminate\Support\Str;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use SOSEventsBV\Cms\FilamentComponents\SeoSettings;
 use SOSEventsBV\Cms\Models\Currency;
-use SOSEventsBV\Cms\Api\LeisureKingClient;
+use SOSEventsBV\Cms\Api\LeisurekingClient;
 
 class ProductForm
 {
-    public static function lkApi(): LeisureKingClient
+    public static function lkApi(): LeisurekingClient
     {
-        return new LeisureKingClient();
+        return new LeisurekingClient();
     }
 
     /**

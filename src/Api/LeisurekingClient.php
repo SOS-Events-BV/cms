@@ -12,7 +12,7 @@ use Illuminate\Support\Collection;
 use Exception;
 use InvalidArgumentException;
 
-class LeisureKingClient extends ApiClient
+class LeisurekingClient extends ApiClient
 {
     protected string $baseUrl;
     protected string $version;
