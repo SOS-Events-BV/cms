@@ -90,8 +90,6 @@
         @endswitch
     @endforeach
 
-    <x-cms::form.recaptcha />
-
     <button type="submit" class="btn btn-blue">
         Verzenden
     </button>

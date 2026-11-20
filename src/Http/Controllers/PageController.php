@@ -59,9 +59,6 @@ class PageController
             })
             ->toArray();
 
-        // Add recaptcha validation rule
-        $rules['g-recaptcha-response'] = ['required', 'captcha'];
-
         $validator = Validator::make($request->all(), $rules);
 
         // If validation fails, redirect back with errors and input, with a fragment to the form
@@ -72,10 +69,7 @@ class PageController
                 ->withFragment('form');
         }
 
-        // Get validated data without g-recaptcha-response
-        $formData = collect($validator->validated())
-            ->except('g-recaptcha-response')
-            ->toArray();
+        $formData = $validator->validated();
 
         // Send email to the given email with form data
         $email = $pageForm->data->email;
