@@ -95,10 +95,14 @@ CMS_MICROSOFT_CLIENT_ID=
 CMS_MICROSOFT_CLIENT_SECRET=
 CMS_MICROSOFT_TENANT_ID=
 
-# Recaptcha / No captcha keys
-NOCAPTCHA_SECRET=
-NOCAPTCHA_SITEKEY=
+# ReCaptcha
+CMS_RECAPTCHA_PROJECT_ID=
+CMS_RECAPTCHA_SITE_KEY=
+CMS_RECAPTCHA_API_KEY=
+CMS_RECAPTCHA_THRESHOLD=
 ```
+
+> **reCAPTCHA:** create a reCAPTCHA Enterprise key of the **checkbox** type in Google Cloud. The form renders the checkbox widget, so a score-based key (without checkbox) will not work. `CMS_RECAPTCHA_API_KEY` is a Google Cloud API key with access to the reCAPTCHA Enterprise API.
 
 ### Styling (optional)
 

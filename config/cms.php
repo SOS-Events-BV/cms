@@ -1,12 +1,5 @@
 <?php
 
-use SOSEventsBV\Cms\Resources\Categories\CategoryResource;
-use SOSEventsBV\Cms\Resources\Events\EventResource;
-use SOSEventsBV\Cms\Resources\FaqPageQuestions\FaqPageQuestionResource;
-use SOSEventsBV\Cms\Resources\Pages\PageResource;
-use SOSEventsBV\Cms\Resources\Products\ProductResource;
-use SOSEventsBV\Cms\Resources\Reviews\ReviewResource;
-
 // config for SOSEventsBV/Cms
 return [
     // Name of the app
@@ -101,6 +94,13 @@ return [
             'tenant' => env('CMS_MICROSOFT_TENANT_ID'),
             'include_avatar' => true,
             'include_avatar_size' => '120x120',
+        ],
+
+        'recaptcha' => [
+            'project_id' => env('CMS_RECAPTCHA_PROJECT_ID'),
+            'site_key' => env('CMS_RECAPTCHA_SITE_KEY'),
+            'api_key' => env('CMS_RECAPTCHA_API_KEY'),
+            'threshold' => (float) env('CMS_RECAPTCHA_THRESHOLD', 0.5),
         ],
     ],
 

@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use SOSEventsBV\Cms\Mail\FormMail;
 use SOSEventsBV\Cms\Models\Page;
+use SOSEventsBV\Cms\Rules\Captcha;
 
 class PageController
 {
@@ -60,7 +61,7 @@ class PageController
             ->toArray();
 
         // Add recaptcha validation rule
-        $rules['g-recaptcha-response'] = ['required', 'captcha'];
+        $rules['g-recaptcha-response'] = ['required', new Captcha("PAGEFORM")];
 
         $validator = Validator::make($request->all(), $rules);
 
