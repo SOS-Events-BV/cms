@@ -17,6 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Pboivin\FilamentPeek\FilamentPeekPlugin;
 use SOSEventsBV\Cms\Enums\NavigationGroup;
 use SOSEventsBV\Cms\Pages\ManageCompany;
+use SOSEventsBV\Cms\Resources\Announcements\AnnouncementResource;
 use SOSEventsBV\Cms\Resources\Categories\CategoryResource;
 use SOSEventsBV\Cms\Resources\Events\EventResource;
 use SOSEventsBV\Cms\Resources\FaqPageQuestions\FaqPageQuestionResource;
@@ -34,6 +35,7 @@ class CmsPlugin implements Plugin
     protected bool $withFaq = true;
     protected bool $withEvents = true;
     protected bool $withProducts = true;
+    protected bool $withAnnouncements = true;
 
     protected array $additionalPageInputs = [];
 
@@ -58,6 +60,12 @@ class CmsPlugin implements Plugin
     public function withoutProducts(): self
     {
         $this->withProducts = false;
+        return $this;
+    }
+
+    public function withoutAnnouncements(): self
+    {
+        $this->withAnnouncements = false;
         return $this;
     }
 
@@ -91,6 +99,7 @@ class CmsPlugin implements Plugin
             $resources[] = CategoryResource::class;
             $resources[] = ProductResource::class;
         }
+        if ($this->withAnnouncements) $resources[] = AnnouncementResource::class;
 
         $panel
             ->plugins([
