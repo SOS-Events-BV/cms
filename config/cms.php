@@ -2,28 +2,10 @@
 
 // config for SOSEventsBV/Cms
 return [
-    // Name of the app
-    'app_name' => config('app.name', 'Cms'),
-
     /**
      * Layout for the app
      */
-    'layout' => 'layout',
-
-    /**
-     * Specify the views that should be used by the Cms plugin.
-     * Override these to use your own views with custom styling.
-     */
-    'views' => [
-        'page' => 'cms::page.show',
-    ],
-
-    /**
-     * Specify the models that should be used by the Cms plugin.
-     */
-    'models' => [
-        'user' => \App\Models\User::class
-    ],
+    'layout' => 'cms::layout',
 
     /**
      * Specify the routing settings for the Page model. These will be used for the Page model.

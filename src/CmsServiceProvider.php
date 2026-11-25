@@ -37,6 +37,11 @@ class CmsServiceProvider extends PackageServiceProvider
                     ->publishConfigFile()
                     ->publishAssets()
                     ->publishMigrations()
+                    ->startWith(function (InstallCommand $command) {
+                        if ($command->confirm('Would you like to publish all CMS views so you can customize them?', true)) {
+                            $command->call('vendor:publish', ['--tag' => 'cms-views']);
+                        }
+                    })
                     ->askToRunMigrations()
                     ->endWith(function (InstallCommand $command) {
                         $command->call('filament:assets');
