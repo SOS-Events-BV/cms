@@ -129,6 +129,53 @@ Also, make sure that you add the following to your `app.css` file:
 
 This will make sure that the CSS of the page builder blocks is included in the build.
 
+### Announcements
+
+Announcements are site-wide messages that are managed in the CMS. Each announcement has a type
+(info, warning or error), a title, a message, an optional button and a start and end date. An announcement is visible
+from the start date up to and including the end date.
+
+Place the announcement banner component where you want the announcements to appear, for example at the top of your
+layout:
+
+```blade
+<x-cms::announcement-banner />
+```
+
+The colors of the announcements are not defined in the package, so every website can use its own colors. Each
+announcement gets the class `announcement` and a class per type (`announcement-info`, `announcement-warning` or
+`announcement-error`). The button gets the class `announcement-button`. Add the following to your `app.css` file and
+change the colors to match your website:
+
+```css
+.announcement-info {
+    @apply bg-blue-100 text-blue-800;
+}
+
+.announcement-info .announcement-button {
+    @apply bg-blue-500 hover:bg-blue-700 text-white;
+}
+
+.announcement-warning {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.announcement-warning .announcement-button {
+    @apply bg-yellow-500 hover:bg-yellow-700 text-white;
+}
+
+.announcement-error {
+    @apply bg-red-100 text-red-800;
+}
+
+.announcement-error .announcement-button {
+    @apply bg-red-500 hover:bg-red-700 text-white;
+}
+```
+
+If you are using the [CMS Template](https://github.com/sos-events-bv/website-template), these styles are already
+included. Announcements can be disabled with `->withoutAnnouncements()` (see [Optional features](#optional-features)).
+
 ## Layout
 
 The plugin ships with a default layout (`cms::layout`), which is used to render the CMS pages. It contains the SEO and
@@ -186,7 +233,8 @@ CmsPlugin::make()
     ->withoutReviews()
     ->withoutFaq()
     ->withoutEvents()
-    ->withoutProducts(), // also disables Categories
+    ->withoutProducts() // also disables Categories
+    ->withoutAnnouncements(),
 ```
 
 ### Additional page fields
