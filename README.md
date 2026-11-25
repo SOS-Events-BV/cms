@@ -11,8 +11,9 @@ After adding the package to your project, you can install the plugin by running:
 php artisan cms:install
 ```
 
-This will ask if you want to run the migrations. If you haven't run the migrations yet, make sure you select yes. If you
-have already run the migrations, please delete all tables and run the migrations again.
+This will ask if you want to publish the CMS views (see [Customizing views](#customizing-views)) and if you want to run
+the migrations. If you haven't run the migrations yet, make sure you select yes. If you have already run the migrations,
+please delete all tables and run the migrations again.
 
 Because we make changes to the User model, we need to add the `HasCmsFields` trait to the User model. This can be
 done by adding the following line to the `App\Models\User` model:
@@ -128,9 +129,24 @@ Also, make sure that you add the following to your `app.css` file:
 
 This will make sure that the CSS of the page builder blocks is included in the build.
 
-## Requirements
+## Layout
 
-This plugin requires a `layout` Blade component in your project with the following props:
+The plugin ships with a default layout (`cms::layout`), which is used to render the CMS pages. It contains the SEO and
+Open Graph meta tags, loads `resources/css/app.css` and `resources/js/app.js` through Vite (when a build or dev server
+is available) and includes Livewire. It also provides two stacks you can push to: `head` and `body`.
+
+To customize the default layout, publish the views (see [Customizing views](#customizing-views)) and edit
+`resources/views/vendor/cms/components/layout.blade.php`.
+
+### Using your own layout component
+
+You can also use your own layout component by changing it in the config:
+
+```php
+'layout' => 'layout', // x-layout
+```
+
+Your component must accept the following props:
 
 ```php
 @props([
@@ -143,13 +159,21 @@ This plugin requires a `layout` Blade component in your project with the followi
 ])
 ```
 
-If you are using the [CMS Template](https://github.com/sos-events-bv/website-template), this is already included.
+If you are using the [CMS Template](https://github.com/sos-events-bv/website-template), this component is already
+included.
 
-You can change the layout component in the config:
+## Customizing views
 
-```php
-'layout' => 'layout', // x-layout
+All views of the plugin (layout, page builder blocks, form fields, e-mails, etc.) can be published to your project, so
+you can change them to match the style of your website:
+
+```bash
+php artisan vendor:publish --tag=cms-views
 ```
+
+The views will be published to `resources/views/vendor/cms`. Laravel uses a published view instead of the one in the
+package, and falls back to the package for every view that is not published. It is therefore recommended to only keep
+the views you actually change, so the other views keep receiving updates from the package.
 
 ## Usage
 

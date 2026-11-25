@@ -79,9 +79,7 @@ class EditPage extends EditRecord
             $data['page'] = $page;
         }
 
-        $view = config('cms.views.page', 'cms::page.show');
-
-        return view($view, $data)->render();
+        return view('cms::page.show', $data)->render();
     }
 
 
