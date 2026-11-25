@@ -30,8 +30,9 @@
         <meta property="og:image"
             content="{{ str_starts_with($og_image, 'http') ? $og_image : asset(Storage::url($og_image)) }}" />
     @endif
-    {{-- / SEO --}}
 
+    <link rel="canonical" href="{{ \SOSEventsBV\Cms\Facades\Seo::canonical() }}">
+    {{-- / SEO --}}
 
     {{-- Styles  --}}
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
