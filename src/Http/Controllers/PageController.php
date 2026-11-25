@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\View\View;
 use SOSEventsBV\Cms\Mail\FormMail;
 use SOSEventsBV\Cms\Models\Page;
+use SOSEventsBV\Cms\Rules\Captcha;
 
 class PageController
 {
@@ -59,6 +60,9 @@ class PageController
             })
             ->toArray();
 
+        // Add recaptcha validation rule
+        $rules['g-recaptcha-response'] = ['required', new Captcha("PAGEFORM")];
+
         $validator = Validator::make($request->all(), $rules);
 
         // If validation fails, redirect back with errors and input, with a fragment to the form
@@ -69,7 +73,10 @@ class PageController
                 ->withFragment('form');
         }
 
-        $formData = $validator->validated();
+        // Get validated data without g-recaptcha-response
+        $formData = collect($validator->validated())
+            ->except('g-recaptcha-response')
+            ->toArray();
 
         // Send email to the given email with form data
         $email = $pageForm->data->email;
