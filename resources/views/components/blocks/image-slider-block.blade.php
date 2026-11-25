@@ -2,7 +2,8 @@
     <div class="swiper-wrapper">
         @foreach ($images as $image)
             <div class="swiper-slide">
-                <img src="{{ Storage::url($image->url) }}" alt="{{ $image->alt ?? "Afbeelding {$loop->iteration}" }}" class="rounded-lg">
+                <img src="{{ Storage::url($image->url) }}" alt="{{ $image->alt ?? "Afbeelding {$loop->iteration}" }}"
+                    class="rounded-lg">
             </div>
         @endforeach
     </div>
@@ -17,12 +18,11 @@
     @endif
 </div>
 
-@pushonce('scripts')
-    <link
-        rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"
-    />
+@pushonce('head')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+@endpushonce
 
+@pushonce('body')
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
 
     <script>
@@ -36,26 +36,26 @@
                     breakpoints: data.breakpoints,
                     modules: [Swiper.Navigation, Swiper.Autoplay, Swiper.Pagination],
 
-                    navigation: data.navigation
-                        ? {
+                    navigation: data.navigation ?
+                        {
                             nextEl: el.querySelector(".swiper-button-next"),
                             prevEl: el.querySelector(".swiper-button-prev"),
-                        }
-                        : false,
+                        } :
+                        false,
 
-                    autoplay: data.autoplay
-                        ? {
+                    autoplay: data.autoplay ?
+                        {
                             delay: data.autoplaySpeed,
                             disableOnInteraction: false,
-                        }
-                        : false,
+                        } :
+                        false,
 
-                    pagination: data.pagination
-                        ? {
+                    pagination: data.pagination ?
+                        {
                             el: el.querySelector(".swiper-pagination"),
                             clickable: true,
-                        }
-                        : false,
+                        } :
+                        false,
                 });
             });
         });
