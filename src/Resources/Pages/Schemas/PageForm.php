@@ -13,6 +13,7 @@ use Filament\Support\Icons\Heroicon;
 use SOSEventsBV\Cms\CmsPlugin;
 use SOSEventsBV\Cms\FilamentComponents\SeoSettings;
 use SOSEventsBV\Cms\FilamentComponents\ContentBuilder;
+use SOSEventsBV\Cms\Rules\Slug;
 
 class PageForm
 {
@@ -61,6 +62,7 @@ class PageForm
 
                 // Unique slug to the page
                 TextInput::make('slug')
+                    ->prefix('/')
                     ->label(__('cms::pages.slug'))
                     ->afterLabel(__('cms::pages.helpers.slug'))
                     ->required()
@@ -70,6 +72,7 @@ class PageForm
                             __('cms::pages.helpers.url', ['url' => route(config('cms.routes.page'), $get('slug'))])
                             : null
                     )
+                    ->rules([new Slug()])
                     ->live(debounce: 500)
                     ->columnSpanFull(),
 
