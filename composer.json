@@ -23,7 +23,7 @@
         }
     ],
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "bezhansalleh/filament-language-switch": "^5.1",
         "cocosmos/filament-sticky-save-bar": "^1.1",
         "dutchcodingcompany/filament-socialite": "^3.3",
