@@ -4,8 +4,8 @@ namespace SOSEventsBV\Cms\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use SOSEventsBV\Cms\Models\Redirect;
+use SOSEventsBV\Cms\Facades\Weglot;
 
 class HandleRedirects
 {
@@ -14,9 +14,14 @@ class HandleRedirects
         // Don't check for redirects on admin pages
         if ($request->is('admin') || $request->is('admin/*')) return $next($request);
 
-        // Cache all redirects, if not done so
+        // Get the redirect
         $redirect = Redirect::query()
             ->where('from', $request->path())
+            ->where(function ($query) {
+                $query->where('language', Weglot::language())
+                    ->orWhereNull('language');
+            })
+            ->orderByRaw('language IS NULL')
             ->first();
 
         // If there is a redirect there, redirect to `to`
