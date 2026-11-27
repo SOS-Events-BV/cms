@@ -101,6 +101,9 @@ CMS_RECAPTCHA_PROJECT_ID=
 CMS_RECAPTCHA_SITE_KEY=
 CMS_RECAPTCHA_API_KEY=
 CMS_RECAPTCHA_THRESHOLD=
+
+# Weglot
+CMS_WEGLOT_AVAILABLE_LANGUAGES=nl,en,de
 ```
 
 > **reCAPTCHA:** create a reCAPTCHA Enterprise key of the **checkbox** type in Google Cloud. The form renders the checkbox widget, so a score-based key (without checkbox) will not work. `CMS_RECAPTCHA_API_KEY` is a Google Cloud API key with access to the reCAPTCHA Enterprise API.

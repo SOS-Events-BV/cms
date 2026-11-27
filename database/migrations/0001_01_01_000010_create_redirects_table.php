@@ -9,6 +9,7 @@ return new class extends Migration {
     {
         Schema::create('redirects', function (Blueprint $table) {
             $table->id();
+            $table->string('language')->nullable()->comment('Language the redirect is for, null if the redirect is for all languages');
             $table->string('from');
             $table->string('to');
             $table->integer('status_code')->default(301);

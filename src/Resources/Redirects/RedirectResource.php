@@ -2,8 +2,6 @@
 
 namespace SOSEventsBV\Cms\Resources\Redirects;
 
-use SOSEventsBV\Cms\Enums\NavigationGroup;
-use Override;
 use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
@@ -17,9 +15,10 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use Override;
+use SOSEventsBV\Cms\Enums\NavigationGroup;
 use SOSEventsBV\Cms\Models\Redirect;
 use SOSEventsBV\Cms\Resources\Redirects\Pages\ManageRedirects;
-use UnitEnum;
 
 class RedirectResource extends Resource
 {
@@ -45,14 +44,23 @@ class RedirectResource extends Resource
     {
         return $schema
             ->components([
+                Select::make('language')
+                    ->label(__('cms::redirects.language'))
+                    ->options(fn (): array => collect(config('cms.services.weglot.available_languages', []))
+                        ->mapWithKeys(fn (string $language): array => [$language => strtoupper($language)])
+                        ->all())
+                    ->placeholder(__('cms::redirects.all_languages'))
+                    ->helperText(__('cms::redirects.helpers.language'))
+                    ->native(false)
+                    ->columnSpanFull(),
+
                 TextInput::make('from')
                     ->label(__('cms::redirects.from'))
                     ->required()
-                    ->prefix(config('app.url') . '/')
+                    ->prefix(config('app.url').'/')
                     ->placeholder(__('cms::redirects.placeholders.from'))
                     ->helperText(__('cms::redirects.helpers.from'))
-                    ->dehydrateStateUsing(fn($state) => ltrim($state, '/')) // Removes slash if the user types it
-                    ->unique(ignorable: fn($record) => $record)
+                    ->dehydrateStateUsing(fn ($state) => ltrim($state, '/')) // Removes slash if the user types it
                     ->columnSpanFull(),
 
                 TextInput::make('to')
@@ -61,7 +69,9 @@ class RedirectResource extends Resource
                     ->placeholder(__('cms::redirects.placeholders.to'))
                     ->helperText(__('cms::redirects.helpers.to'))
                     ->dehydrateStateUsing(function ($state) {
-                        if (empty($state)) return $state;
+                        if (empty($state)) {
+                            return $state;
+                        }
 
                         // If the user types in a full URL, just return it.
                         if (str_starts_with($state, 'http')) {
@@ -89,6 +99,11 @@ class RedirectResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('language')
+                    ->label(__('cms::redirects.language'))
+                    ->formatStateUsing(fn (string $state): string => strtoupper($state))
+                    ->placeholder(__('cms::redirects.all_languages')),
+
                 TextColumn::make('from')
                     ->label(__('cms::redirects.from'))
                     ->searchable()
