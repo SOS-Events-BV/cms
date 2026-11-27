@@ -15,13 +15,16 @@ This will ask if you want to publish the CMS views (see [Customizing views](#cus
 the migrations. If you haven't run the migrations yet, make sure you select yes. If you have already run the migrations,
 please delete all tables and run the migrations again.
 
-Because we make changes to the User model, we need to add the `HasCmsFields` trait to the User model. This can be
-done by adding the following line to the `App\Models\User` model:
+Because we make changes to the User model, we need to add the `HasCmsFields` trait to the User model. The User model
+must also implement `HasAvatar`, so Filament shows the Microsoft avatar of the user. This can be done by adding the
+following to the `App\Models\User` model:
 
 ```php
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
 use SOSEventsBV\Cms\Traits\HasCmsFields;
 
-class User extends Authenticatable implements FilamentUser
+class User extends Authenticatable implements FilamentUser, HasAvatar
 {
     use HasCmsFields;
 
@@ -275,14 +278,11 @@ blocks. On the front end, the page view loops over `$page->content_objects` and 
 
 ```blade
 @foreach ($page->content_objects as $block)
-    {{-- Temp fix for block names, will be fixed in new version --}}
-    @php($blockView = str_replace('_', '-', $block->type))
-
-    {{-- Package Components --}}
-    @if(view()->exists("cms::components.blocks.{$blockView}"))
+    {{-- CMS Components --}}
+    @if(view()->exists("cms::components.blocks.{$block->type}"))
         <x-dynamic-component :component="'cms::blocks.' . $block->type" :data="$block->data"/>
     {{-- Own components --}}
-    @elseif(view()->exists("components.cms.custom-blocks.{$blockView}"))
+    @elseif(view()->exists("components.cms.custom-blocks.{$block->type}"))
         <x-dynamic-component :component="'cms.custom-blocks.' . $block->type" :data="$block->data"/>
     @endif
 @endforeach
@@ -310,8 +310,8 @@ class Product extends Model
 }
 ```
 
-Then use `ContentBuilder::make('content')->blocks(ContentBuilder::blocks('product'))` in your Filament form schema and
-render with `$product->content_objects` in your Blade view.
+Then use `ContentBuilder::make('content', 'product')` in your Filament form schema (the second argument is the upload
+directory for image blocks) and render with `$product->content_objects` in your Blade view.
 
 If the content field is named differently, override `contentBlocksField()` in your model:
 
@@ -364,7 +364,8 @@ directly like this regardless of `register_catch_all`.
 ### Routes config
 
 The `routes` array in `config/cms.php` maps resource types to named routes in your application. These are used to
-show a "View on site" button in the admin panel. Set a value to `null` to hide the button for that resource.
+show a "View on site" button in the admin panel. Set a value to `null` to hide the button for that resource. By default,
+all routes except `page` are `null`. For example:
 
 ```php
 'routes' => [
@@ -375,15 +376,5 @@ show a "View on site" button in the admin panel. Set a value to `null` to hide t
     'faq'      => 'faq',
     'events'   => 'events',
     'products' => 'products',
-],
-```
-
-### Overriding views
-
-Publish the config and point `views.page` to your own Blade view to customize the page layout:
-
-```php
-'views' => [
-    'page' => 'my-theme::page.show',
 ],
 ```
