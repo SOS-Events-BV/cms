@@ -52,7 +52,7 @@ class RedirectResource extends Resource
                     ->placeholder(__('cms::redirects.placeholders.from'))
                     ->helperText(__('cms::redirects.helpers.from'))
                     ->dehydrateStateUsing(fn($state) => ltrim($state, '/')) // Removes slash if the user types it
-                    ->unique(ignoreRecord: true)
+                    ->unique(ignorable: fn($record) => $record)
                     ->columnSpanFull(),
 
                 TextInput::make('to')

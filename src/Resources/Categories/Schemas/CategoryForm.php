@@ -69,6 +69,7 @@ class CategoryForm
 
                 TextInput::make('slug')
                     ->label(__('cms::common.slug'))
+                    ->unique(ignorable: fn($record) => $record)
                     ->required(),
 
                 RichEditor::make('description')
