@@ -4,6 +4,8 @@ return [
     'redirect' => 'Redirect',
     'redirects' => 'Redirects',
 
+    'language' => 'Taal',
+    'all_languages' => 'Alle talen',
     'from' => 'Van URL',
     'to' => 'Naar URL',
     'status_code' => 'Status code',
@@ -19,7 +21,8 @@ return [
     ],
 
     'helpers' => [
-        'from' => 'Zet geen / aan het begin, mag wel een / bevatten (Bijvoorbeeld: pagina/subpagina).',
+        'language' => 'Kies een taal als de redirect alleen moet gelden voor bezoekers van die taalversie. Laat leeg voor alle talen. Een redirect voor een specifieke taal gaat voor een redirect voor alle talen.',
+        'from' => 'Zet geen / aan het begin, mag wel een / bevatten (Bijvoorbeeld: pagina/subpagina). Gebruik altijd de Nederlandse slug, ook als de redirect voor een andere taal is. De door Weglot vertaalde slug komt niet bij de server aan.',
         'to' => 'Gebruik een / voor interne pagina\'s, type https:// voor externe pagina\'s (Bijvoorbeeld https://google.com).',
     ],
 

@@ -84,6 +84,10 @@ return [
             'api_key' => env('CMS_RECAPTCHA_API_KEY'),
             'threshold' => (float) env('CMS_RECAPTCHA_THRESHOLD', 0.5),
         ],
+
+        'weglot' => [
+            'available_languages' => explode(',', (string) env('CMS_WEGLOT_AVAILABLE_LANGUAGES', 'nl,en,de')),
+        ],
     ],
 
     /**
